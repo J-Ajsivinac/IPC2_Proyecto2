@@ -19,7 +19,7 @@ class LinkedListDrone:
             self.first = new_data
         else:
             current = self.first
-            while current.next_node.name > data and current.next_node:
+            while current.next_node and current.next_node.name < data:
                 current = current.next_node
             new_data.next_node = current.next_node
             current.next_node = new_data
