@@ -9,8 +9,22 @@ class LinkedListDrone:
     def is_empty(self):
         return self.first is None
 
-    def insert_sorted(self, data):
-        new_data = NodeDrone(data)
+    # Nombre, matriz
+    def insert(self, data, i_d=None):
+        if not self.first:
+            self.first = NodeDrone(data, i_d)
+            self.size += 1
+            return
+        current = self.first
+        while current.next_node:
+            current = current.next_node
+        current.next_node = NodeDrone(data, i_d)
+        self.size += 1
+
+    def insert_sorted(self, data, i_d=None):
+        if not i_d:
+            i_d = self.size + 1
+        new_data = NodeDrone(data, i_d)
         if self.is_empty():
             self.first = new_data
             new_data.next_node = None
@@ -23,6 +37,7 @@ class LinkedListDrone:
                 current = current.next_node
             new_data.next_node = current.next_node
             current.next_node = new_data
+        self.size += 1
 
     def verify_dup(self, name):
         current = self.first
@@ -46,4 +61,10 @@ class LinkedListDrone:
         current = self.first
         while current:
             print(current.name)
+            current = current.next_node
+
+    def print_temp(self):
+        current = self.first
+        while current:
+            current.name.display_matrix(current.i_d)
             current = current.next_node
