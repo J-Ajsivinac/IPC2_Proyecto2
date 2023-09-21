@@ -37,24 +37,23 @@ class WindowP(QWidget):
         self.layout_sidebar.setSpacing(10)
 
         # Botones
-        self.btn_init = self.custom_button("Inicializar", self.show_dialog)
+        # self.btn_init = self.custom_button("Inicializar", )
         # self.btn_init.clicked.connect(lambda: self.stack.setCurrentIndex(0))
-        self.layout_sidebar.addWidget(self.btn_init)
+        # self.layout_sidebar.addWidget(self.btn_init)
 
-        self.btn_load = self.custom_button(
-            "Cargar Archivo", lambda: self.stack.setCurrentIndex(1)
-        )
+        # self.btn_load = self.custom_button(
+        #     "Cargar Archivo", lambda: self.stack.setCurrentIndex(1)
+        # )
         # self.btn_load.clicked.connect(lambda: self.stack.setCurrentIndex(1))
-        self.layout_sidebar.addWidget(self.btn_load)
+        # self.layout_sidebar.addWidget(self.btn_load)
 
-        self.btn_generate = self.custom_button("Generar Archivo")
+        self.btn_generate = self.custom_button("Inicio")
         self.btn_view_d = self.custom_button("Drones")
-        self.btn_view_list = self.custom_button("Sistemas de Drones")
+        # self.btn_view_list = self.custom_button("Sistemas de Drones")
         self.btn_messages = self.custom_button("Mensajes")
         self.btn_help = self.custom_button("Ayuda")
         self.layout_sidebar.addWidget(self.btn_generate)
         self.layout_sidebar.addWidget(self.btn_view_d)
-        self.layout_sidebar.addWidget(self.btn_view_list)
         self.layout_sidebar.addWidget(self.btn_messages)
         self.layout_sidebar.addWidget(self.btn_help)
         self.layout_sidebar.addStretch(1)
@@ -90,7 +89,8 @@ class WindowP(QWidget):
                 color: #9d9da0;
                 border: 0px;
                 border-radius: 4px;
-                padding:10px 0 8px 0;
+                padding:10px 0 8px 15px;
+                text-align: left;
             }
             QPushButton:hover {
                 background-color: #323240;

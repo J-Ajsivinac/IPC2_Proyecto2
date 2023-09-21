@@ -24,21 +24,23 @@ class Read:
         for list_ in self.root.findall("listaSistemasDrones"):
             for sistem_l in list_.findall("sistemaDrones"):
                 # recuperar limites
-                temp = DoublyLinkedListSistem()
+
                 system_name = sistem_l.get("nombre")
                 h_limit = sistem_l.findtext("alturaMaxima")
                 d_limit = sistem_l.findtext("cantidadDrones")
                 matrix = MainSistem(int(d_limit), int(h_limit))
                 # print(h_limit, d_limit)
+
                 for content in sistem_l.findall("contenido"):
                     dron = content.findtext("dron")
+                    temp = LinkedListDrone()
                     for Hight in content.findall("alturas"):
                         for h in Hight.findall("altura"):
                             if int(h.get("valor")) <= int(h_limit):
-                                temp.insert_sorter(h.get("valor"), h.text)
-                                # print(h.get("valor"), h.text, dron)
-                        matrix.create_matrix(dron, temp)
-                list_ori.insert(matrix, system_name)
+                                temp.insert_sorted(h.get("valor"), h.text)
+                    matrix.create_matrix(dron, temp)
+                list_ori.insert(system_name, matrix)
+                print(matrix.rows, system_name)
 
     def load_list_mes(self):
         for m_list in self.root.findall("listaMensajes"):
