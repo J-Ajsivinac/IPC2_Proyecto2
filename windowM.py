@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import (
     QPushButton,
     QVBoxLayout,
+    QHBoxLayout,
     QLabel,
     QWidget,
     QSplitter,
@@ -8,6 +9,7 @@ from PySide6.QtWidgets import (
     QFileDialog,
 )
 from PySide6.QtGui import QFont
+from PySide6 import QtCore
 import sys
 from modules.readFiles import Read
 from Tdas.linkedListD import LinkedListDrone
@@ -18,6 +20,7 @@ class WindowP(QWidget):
         super().__init__()
         self.drone_list = LinkedListDrone()
         self.s_list = LinkedListDrone()
+        self.m_list = LinkedListDrone()
         self.initUI()
 
     def initUI(self):
@@ -31,21 +34,10 @@ class WindowP(QWidget):
         # Sidebar
         self.sidebar = QWidget(self)
         self.layout_sidebar = QVBoxLayout(self.sidebar)
-        self.layout_sidebar.setContentsMargins(10, 20, 10, 10)
+        self.layout_sidebar.setContentsMargins(10, 220, 10, 10)
         self.sidebar.setStyleSheet("background-color: #1c1c24;")
         self.sidebar.setFixedWidth(220)
-        self.layout_sidebar.setSpacing(10)
-
-        # Botones
-        # self.btn_init = self.custom_button("Inicializar", )
-        # self.btn_init.clicked.connect(lambda: self.stack.setCurrentIndex(0))
-        # self.layout_sidebar.addWidget(self.btn_init)
-
-        # self.btn_load = self.custom_button(
-        #     "Cargar Archivo", lambda: self.stack.setCurrentIndex(1)
-        # )
-        # self.btn_load.clicked.connect(lambda: self.stack.setCurrentIndex(1))
-        # self.layout_sidebar.addWidget(self.btn_load)
+        self.layout_sidebar.setSpacing(20)
 
         self.btn_generate = self.custom_button("Inicio")
         self.btn_view_d = self.custom_button("Drones")
@@ -61,9 +53,30 @@ class WindowP(QWidget):
         # Panel
         self.panel_right = QWidget(self)
         self.layout_right = QVBoxLayout(self.panel_right)
-        self.label1 = QLabel("Has seleccionado la opción 1", self.panel_right)
-        self.layout_right.addWidget(self.label1)
+
+        self.panel_up = QWidget(self.panel_right)
+        self.layout_up = QVBoxLayout(self.panel_up)
+
+        self.label1 = QLabel("Inicio", self.panel_up)
+        self.label1.setStyleSheet("color:#ffffff")
+        self.layout_up.addWidget(self.label1)
+        self.panel_up.setFixedHeight(30)
+
+        self.panel_init = QWidget(self.panel_right)
+        self.layout_init = QHBoxLayout(self.panel_init)
+        self.btn_init = self.big_buttons("Inicializari Sistema")
+        self.btn_open = self.big_buttons("Cargar Archivo", self.show_dialog)
+        self.btn_create = self.big_buttons("Generar Archivo")
+        self.layout_init.addWidget(self.btn_init)
+        self.layout_init.addWidget(self.btn_open)
+        self.layout_init.addWidget(self.btn_create)
+        # self.layout_init.addWidget(self.panel_init)
+        self.panel_init.setStyleSheet("background-color: #202029")
+
+        self.layout_right.addWidget(self.panel_up)
+        self.layout_right.addWidget(self.panel_init)
         self.panel_right.setStyleSheet("background-color: #202029;")
+        self.panel_right.setFixedHeight(320)
 
         self.panel_2 = QWidget(self)
         self.layout_2 = QVBoxLayout(self.panel_2)
@@ -105,6 +118,30 @@ class WindowP(QWidget):
         boton.clicked.connect(funcion)
         return boton
 
+    def big_buttons(self, texto, funcion=None):
+        btn = QPushButton(texto)
+        btn.setFixedSize(QtCore.QSize(220, 220))
+        btn.setStyleSheet(
+            """
+            QPushButton {
+                background-color: #2F3340;
+                color: #9EACD9;
+                border: 0px;
+                border-radius: 4px;
+            }
+            QPushButton:hover {
+                background-color: #383D4D;
+                color: #A8B6E6;
+            }
+            QPushButton:pressed {
+                background-color: #414759;
+                color: #ffffff;
+            }
+        """
+        )
+        btn.clicked.connect(funcion)
+        return btn
+
     def show_dialog(self):
         opciones = QFileDialog.Options()
 
@@ -121,4 +158,4 @@ class WindowP(QWidget):
         if archivo:
             read = Read()
             read.read_file(str(archivo))
-            read.load_data(self.drone_list, self.s_list)
+            read.load_data(self.drone_list, self.s_list, self.m_list)
