@@ -7,6 +7,11 @@ from PySide6.QtWidgets import (
     QSplitter,
     QStackedWidget,
     QFileDialog,
+    QLineEdit,
+    QTableWidget,
+    QTableWidgetItem,
+    QHeaderView,
+    QMessageBox,
 )
 from PySide6.QtGui import QFont
 from PySide6 import QtCore
@@ -39,17 +44,51 @@ class WindowP(QWidget):
         self.sidebar.setFixedWidth(220)
         self.layout_sidebar.setSpacing(20)
 
-        self.btn_generate = self.custom_button("Inicio")
-        self.btn_view_d = self.custom_button("Drones")
+        self.btn_generate = self.custom_button(
+            "Inicio", lambda: self.stack.setCurrentIndex(0)
+        )
+        self.btn_view_d = self.custom_button("Drones", self.change_view_dron)
         # self.btn_view_list = self.custom_button("Sistemas de Drones")
-        self.btn_messages = self.custom_button("Mensajes")
-        self.btn_help = self.custom_button("Ayuda")
+        self.btn_messages = self.custom_button(
+            "Mensajes", lambda: self.stack.setCurrentIndex(2)
+        )
+        self.btn_help = self.custom_button(
+            "Ayuda", lambda: self.stack.setCurrentIndex(3)
+        )
         self.layout_sidebar.addWidget(self.btn_generate)
         self.layout_sidebar.addWidget(self.btn_view_d)
         self.layout_sidebar.addWidget(self.btn_messages)
         self.layout_sidebar.addWidget(self.btn_help)
         self.layout_sidebar.addStretch(1)
 
+        self.p_start()
+
+        self.panel_3 = QWidget(self)
+        self.layout_3 = QVBoxLayout(self.panel_3)
+        self.label3 = QLabel("Has seleccionado la opción 3", self.panel_3)
+        self.layout_3.addWidget(self.label3)
+        self.panel_3.setStyleSheet("background-color: #FFFFFF;")
+
+        self.panel_4 = QWidget(self)
+        self.layout_4 = QVBoxLayout(self.panel_4)
+        self.label4 = QLabel("Has seleccionado la opción 4", self.panel_4)
+        self.layout_4.addWidget(self.label4)
+        self.panel_4.setStyleSheet("background-color: #000000;")
+
+        self.p_dron()
+
+        self.stack.addWidget(self.panel_right)
+        self.stack.addWidget(self.panel_2)
+        self.stack.addWidget(self.panel_3)
+        self.stack.addWidget(self.panel_4)
+
+        self.splitter.addWidget(self.sidebar)
+        self.splitter.addWidget(self.stack)
+
+        self.layout_p.addWidget(self.splitter)
+        self.setFixedSize(1000, 650)
+
+    def p_start(self):
         # Panel
         self.panel_right = QWidget(self)
         self.layout_right = QVBoxLayout(self.panel_right)
@@ -78,20 +117,94 @@ class WindowP(QWidget):
         self.panel_right.setStyleSheet("background-color: #202029;")
         self.panel_right.setFixedHeight(320)
 
+    def print_input(self):
+        text = self.text_add.text()
+        if text.strip():
+            self.drone_list.insert_sorted(text)
+            self.data_dron()
+        else:
+            msg = QMessageBox()
+            msg.setWindowTitle("Error")
+            msg.setText("Ingrese Datos par poder Ingresarlos.")
+            msg.setStyleSheet(
+                """
+        QMessageBox {
+            background-color: #333;
+            color: #fff;
+            text-align: left;
+        }
+        QMessageBox QPushButton {
+            width: 100px;
+            height: 40px;
+            background-color: #555;
+            color: #fff;
+        }
+    """
+            )
+            msg.exec_()
+
+    def change_view_dron(self):
+        self.stack.setCurrentIndex(1)
+        self.data_dron()
+
+    def p_dron(self):
         self.panel_2 = QWidget(self)
         self.layout_2 = QVBoxLayout(self.panel_2)
-        self.label2 = QLabel("Has seleccionado la opción 2", self.panel_2)
-        self.layout_2.addWidget(self.label2)
-        self.panel_2.setStyleSheet("background-color: #FFB6C1;")  # Color rosa claro
+        # self.label2 = QLabel("Has seleccionado la opción 2", self.panel_2)
+        # self.layout_2.addWidget(self.label2)
+        # self.panel_2.setStyleSheet("background-color: #FFB6C1;")
+        self.panel_add = QWidget(self.panel_2)
+        self.layout_add = QHBoxLayout(self.panel_add)
+        self.text_add = QLineEdit()
+        self.btn_add = QPushButton("Agregar")
+        self.btn_add.clicked.connect(self.print_input)
+        self.layout_add.addWidget(self.text_add)
+        self.layout_add.addWidget(self.btn_add)
+        self.panel_add.setFixedHeight(40)
 
-        self.stack.addWidget(self.panel_right)
-        self.stack.addWidget(self.panel_2)
+        self.panel_table = QWidget(self.panel_2)
+        self.layout_table = QVBoxLayout(self.panel_table)
+        self.table = QTableWidget()
+        # self.table.setRowCount(4)
+        self.table.setColumnCount(1)
 
-        self.splitter.addWidget(self.sidebar)
-        self.splitter.addWidget(self.stack)
+        self.header = self.table.horizontalHeader()
+        self.header.setStyleSheet("QHeaderView::section { background-color: #555 }")
+        self.header_vertical = self.table.verticalHeader()
+        self.header_vertical.setStyleSheet(
+            "QHeaderView::section { background-color: #555 }"
+        )
+        self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Dron"))
+        self.header.setSectionResizeMode(QHeaderView.Stretch)
+        self.table.setStyleSheet(
+            """
+                QTableWidget {
+                    background-color: #333;
+                    gridline-color: #555;
+                }
+                QTableWidget::item {
+                    color: #fff;
+                }
+                QTableWidget::item:selected {
+                    background-color: #000;
+                }
+                QTableCornerButton::section { background-color: #555 }
+            """
+        )
+        self.layout_table.addWidget(self.table)
+        self.layout_2.addWidget(self.panel_add)
+        self.layout_2.addWidget(self.panel_table)
 
-        self.layout_p.addWidget(self.splitter)
-        self.setFixedSize(1000, 650)
+    def data_dron(self):
+        current = self.drone_list.first
+        i = 0
+        self.table.setRowCount(0)
+        while current:
+            self.table.insertRow(self.table.rowCount())
+            item = QTableWidgetItem(f"{current.name}")
+            self.table.setItem(i, 0, item)
+            i += 1
+            current = current.next_node
 
     def custom_button(self, texto, funcion=None):
         boton = QPushButton(texto)

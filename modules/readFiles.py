@@ -47,20 +47,13 @@ class Read:
             for message in m_list.findall("Mensaje"):
                 message_name = message.get("nombre")
                 system_name = message.findtext("sistemaDrones")
-                matrix_temp = MainSistem()
-                j = 0
+                # matrix_temp = MainSistem()
+                list_ins = DoublyLinkedListSistem()
                 for instructions in message.findall("instrucciones"):
                     for i in instructions.findall("instruccion"):
-                        temp = LinkedListDrone()
-                        temp.insert(j, int(i.text))
-                        dup = matrix_temp.rows.is_name_repeated_binary_search(
-                            i.get("dron")
-                        )
-
+                        value = int(i.text)
+                        dup = list_ins.search_binary_dup(i.get("dron"))
                         if dup:
-                            # print(dup)
-                            dup.insert(j, int(i.text))
-                        else:
-                            matrix_temp.create_matrix(i.get("dron"), temp)
-                        j += 1
-                list_ori.insert_sorted(message_name, matrix_temp, system_name)
+                            value -= dup
+                        list_ins.insert(i.get("dron"), value)
+                list_ori.insert_sorted(message_name, list_ins, system_name)

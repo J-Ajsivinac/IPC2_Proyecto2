@@ -80,5 +80,6 @@ class LinkedListDrone:
     def print_temp1(self):
         current = self.first
         while current:
-            current.i_d.display_instrucciones(current.name)
+            print(current.name)
+            current.i_d.print_d()
             current = current.next_node

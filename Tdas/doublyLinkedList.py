@@ -7,42 +7,42 @@ class DoublyLinkedListSistem:
         self.end = None
         self.size = 0
 
+    def insert(self, name, letter):
+        new_data = NodeSistem(name, letter)
+        if not self.first:
+            self.first = new_data
+            self.end = new_data
+        else:
+            new_data.last_node = self.end
+            self.end.next_node = new_data
+            self.end = new_data
+        self.size += 1
+
     def insert_sorter(self, name, letter):
         new_data = NodeSistem(name, letter)
-
         if not self.first:
             self.first = new_data
             self.end = new_data
         else:
             current = self.first
-            while current and current.name < name:
+            while current:
+                if current.name > name:
+                    if current.last_node:
+                        current.last_node.next_node = new_data
+                        new_data.last_node = current.last_node
+                    else:
+                        self.first = new_data
+                    new_data.next_node = current
+                    current.last_node = new_data
+                    self.size += 1
+                    return
                 current = current.next_node
+            self.first.next_node = new_data
+            new_data.last_node = self.first
+            self.end = new_data
+            self.size += 1
 
-            # insertar datos al final
-            if not current:
-                last_n = self.first
-                while last_n.next_node:
-                    last_n = last_n.next_node
-                last_n.next_node = new_data
-                new_data.last_node = last_n
-                self.end = new_data
-            # insertar datos al inicio
-            elif not current.last_node:
-                new_data.next_node = self.first
-                self.first.last_node = new_data
-                self.first = new_data
-                if not new_data.next_node:
-                    self.end = new_data
-            # Insertar datos en medio
-            else:
-                new_data.last_node = current.last_node
-                new_data.next_node = current
-                current.last_node.next_node = new_data
-                current.last_node = new_data
-
-        self.size += 1
-
-    def is_name_repeated_binary_search(self, name):
+    def search_binary_dup(self, name):
         if not self.first:
             return None
 
@@ -67,3 +67,9 @@ class DoublyLinkedListSistem:
                 left = mid.next_node
 
         return None
+
+    def print_d(self):
+        current = self.first
+        while current:
+            print(current.name, current.letter)
+            current = current.next_node
