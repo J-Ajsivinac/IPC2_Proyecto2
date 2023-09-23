@@ -11,13 +11,13 @@ from PySide6.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
     QHeaderView,
-    QMessageBox,
 )
 from PySide6.QtGui import QFont
 from PySide6 import QtCore
 import sys
 from modules.readFiles import Read
 from Tdas.linkedListD import LinkedListDrone
+from components.customMessage import *
 
 
 class WindowP(QWidget):
@@ -123,25 +123,7 @@ class WindowP(QWidget):
             self.drone_list.insert_sorted(text)
             self.data_dron()
         else:
-            msg = QMessageBox()
-            msg.setWindowTitle("Error")
-            msg.setText("Ingrese Datos par poder Ingresarlos.")
-            msg.setStyleSheet(
-                """
-        QMessageBox {
-            background-color: #333;
-            color: #fff;
-            text-align: left;
-        }
-        QMessageBox QPushButton {
-            width: 100px;
-            height: 40px;
-            background-color: #555;
-            color: #fff;
-        }
-    """
-            )
-            msg.exec_()
+            error_msgbox("error", "Ingrese Datos para poder Ingresarlos")
 
     def change_view_dron(self):
         self.stack.setCurrentIndex(1)
@@ -215,7 +197,7 @@ class WindowP(QWidget):
         self.table.setRowCount(0)
         while current:
             self.table.insertRow(self.table.rowCount())
-            item = QTableWidgetItem(f"{current.name}")
+            item = QTableWidgetItem(f"{current.i_d}")
             self.table.setItem(i, 0, item)
             i += 1
             current = current.next_node

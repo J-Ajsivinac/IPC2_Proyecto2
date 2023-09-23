@@ -39,7 +39,7 @@ class Read:
                             if int(h.get("valor")) <= int(h_limit):
                                 temp.insert_sorted(h.get("valor"), h.text)
                     matrix.create_matrix(dron, temp)
-                list_ori.insert(system_name, matrix)
+                list_ori.insert_sorted(system_name, matrix)
                 # print(matrix.rows, system_name)
 
     def load_list_mes(self, list_ori: LinkedListDrone):

@@ -11,8 +11,8 @@ class LinkedListDrone:
         return self.first is None
 
     # Nombre, matriz
-    def insert(self, data, i_d=None, temp=None):
-        new_node = NodeDrone(data, i_d, temp)
+    def insert(self, i_d, value=None, temp=None):
+        new_node = NodeDrone(i_d, value, temp)
         if self.is_empty():
             self.first = new_node
             self.end = new_node
@@ -25,15 +25,15 @@ class LinkedListDrone:
         self.end = current.next_node
         self.size += 1
 
-    def insert_sorted(self, data, i_d=None, temp=None):
+    def insert_sorted(self, i_d, value=None, temp=None):
         if not i_d:
             i_d = self.size + 1
-        new_data = NodeDrone(data, i_d, temp)
+        new_data = NodeDrone(i_d, value, temp)
         if self.is_empty():
             self.first = new_data
             self.end = new_data
             new_data.next_node = None
-        elif self.first.name > data:
+        elif self.first.i_d > i_d:
             temp = self.first
             new_data.next_node = self.first
             self.first = new_data
@@ -41,7 +41,7 @@ class LinkedListDrone:
                 self.end = temp
         else:
             current = self.first
-            while current.next_node and current.next_node.name < data:
+            while current.next_node and current.next_node.i_d < i_d:
                 current = current.next_node
             new_data.next_node = current.next_node
             current.next_node = new_data
@@ -52,34 +52,34 @@ class LinkedListDrone:
         prev = None
 
         if self.size == 0:
-            return None
+            return False
 
-        while current and current.name != name:
+        while current and current.i_d != name:
             prev = current
             current = current.next_node
 
         if not current:
-            return None
+            return False
         if not prev:
-            return current
+            return True
 
-        return current
+        return True
 
     def print_drone(self):
         current = self.first
         while current:
-            print(current.name)
+            print(current.i_d)
             current = current.next_node
 
     def print_temp(self):
         current = self.first
         while current:
-            current.i_d.display_matrix(current.name)
+            current.value.display_matrix(current.i_d)
             current = current.next_node
 
     def print_temp1(self):
         current = self.first
         while current:
-            print(current.name)
-            current.i_d.print_d()
+            print(current.i_d)
+            current.value.print_d()
             current = current.next_node

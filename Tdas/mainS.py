@@ -23,9 +23,9 @@ class MainSistem:
         current = self.rows.first
         print(name_system)
         while current:
-            c_1 = current.letter.first
+            c_1 = current.value.first
             while c_1:
-                print(str(c_1.i_d), end="\t")
+                print(str(c_1.value), end="\t")
                 c_1 = c_1.next_node
             print(" ")
             current = current.next_node
@@ -35,7 +35,7 @@ class MainSistem:
         print(name_sys)
         current = self.rows.first
         while current:
-            temp = current.letter.first
+            temp = current.value.first
             while temp:
                 print(temp.i_d)
                 temp = temp.next_node

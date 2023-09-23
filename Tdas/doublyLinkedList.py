@@ -7,8 +7,8 @@ class DoublyLinkedListSistem:
         self.end = None
         self.size = 0
 
-    def insert(self, name, letter):
-        new_data = NodeSistem(name, letter)
+    def insert(self, i_d, letter):
+        new_data = NodeSistem(i_d, letter)
         if not self.first:
             self.first = new_data
             self.end = new_data
@@ -18,15 +18,15 @@ class DoublyLinkedListSistem:
             self.end = new_data
         self.size += 1
 
-    def insert_sorter(self, name, letter):
-        new_data = NodeSistem(name, letter)
+    def insert_sorter(self, i_d, letter):
+        new_data = NodeSistem(i_d, letter)
         if not self.first:
             self.first = new_data
             self.end = new_data
         else:
             current = self.first
             while current:
-                if current.name > name:
+                if current.i_d > i_d:
                     if current.last_node:
                         current.last_node.next_node = new_data
                         new_data.last_node = current.last_node
@@ -37,10 +37,11 @@ class DoublyLinkedListSistem:
                     self.size += 1
                     return
                 current = current.next_node
-            self.first.next_node = new_data
-            new_data.last_node = self.first
+
+            self.end.next_node = new_data
+            new_data.last_node = self.end
             self.end = new_data
-            self.size += 1
+        self.size += 1
 
     def search_binary_dup(self, name):
         if not self.first:
@@ -54,14 +55,14 @@ class DoublyLinkedListSistem:
             while mid.next_node != right:
                 mid = mid.next_node
 
-            if left.name == name:
-                return left.letter
-            if right.name == name:
-                return right.name
-            if mid.name == name:
-                return mid.letter
+            if left.i_d == name:
+                return left.value
+            if right.i_d == name:
+                return right.value
+            if mid.i_d == name:
+                return mid.value
 
-            if name < mid.name:
+            if name < mid.i_d:
                 right = mid
             else:
                 left = mid.next_node
@@ -71,5 +72,5 @@ class DoublyLinkedListSistem:
     def print_d(self):
         current = self.first
         while current:
-            print(current.name, current.letter)
+            print(current.i_d, current.value)
             current = current.next_node
