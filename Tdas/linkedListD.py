@@ -1,4 +1,5 @@
 from Tdas.nodeD import NodeDrone
+from components.customMessage import *
 
 
 class LinkedListDrone:
@@ -26,6 +27,10 @@ class LinkedListDrone:
         self.size += 1
 
     def insert_sorted(self, i_d, value=None, temp=None):
+        if self.verify_dup(i_d):
+            error_msgbox("Error", f"El nombre {i_d} ya está registrado")
+            return
+
         if not i_d:
             i_d = self.size + 1
         new_data = NodeDrone(i_d, value, temp)

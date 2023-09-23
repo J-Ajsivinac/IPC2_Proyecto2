@@ -1,4 +1,5 @@
 from Tdas.nodeS import NodeSistem
+from components.customMessage import *
 
 
 class DoublyLinkedListSistem:
@@ -20,6 +21,9 @@ class DoublyLinkedListSistem:
 
     def insert_sorter(self, i_d, letter):
         new_data = NodeSistem(i_d, letter)
+        if self.search_binary_dup(i_d):
+            error_msgbox("Error", f"El nombre {i_d} ya está registrado")
+            return
         if not self.first:
             self.first = new_data
             self.end = new_data

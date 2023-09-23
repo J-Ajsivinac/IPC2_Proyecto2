@@ -2,6 +2,7 @@ import xml.etree.ElementTree as ET
 from Tdas.linkedListD import LinkedListDrone
 from Tdas.doublyLinkedList import DoublyLinkedListSistem
 from Tdas.mainS import MainSistem
+from components.customMessage import *
 
 
 class Read:
@@ -10,12 +11,13 @@ class Read:
         self.root = self.tree.getroot()
 
     def load_data(self, list_dron, list_sistem, list_messages):
+        self.list_dron: LinkedListDrone = list_dron
         self.load_drones(list_dron)
         self.load_list_drone(list_sistem)
         self.load_list_mes(list_messages)
         # list_dron.print_drone()
-        # list_sistem.print_temp()
-        list_messages.print_temp1()
+        list_sistem.print_temp()
+        # list_messages.print_temp1()
 
     def load_drones(self, list_ori: LinkedListDrone):
         for list_d in self.root.findall("listaDrones"):
@@ -25,7 +27,6 @@ class Read:
     def load_list_drone(self, list_ori: LinkedListDrone):
         for list_ in self.root.findall("listaSistemasDrones"):
             for sistem_l in list_.findall("sistemaDrones"):
-                # recuperar datos del XML
                 system_name = sistem_l.get("nombre")
                 h_limit = sistem_l.findtext("alturaMaxima")
                 d_limit = sistem_l.findtext("cantidadDrones")
@@ -34,6 +35,12 @@ class Read:
                 for content in sistem_l.findall("contenido"):
                     dron = content.findtext("dron")
                     temp = LinkedListDrone()
+                    if not self.list_dron.verify_dup(dron):
+                        error_msgbox(
+                            "Error",
+                            f"El dron {dron} no esta en la lista de drones\nNo se agregará el sistema",
+                        )
+                        continue
                     for Hight in content.findall("alturas"):
                         for h in Hight.findall("altura"):
                             if int(h.get("valor")) <= int(h_limit):
@@ -53,6 +60,12 @@ class Read:
                     for i in instructions.findall("instruccion"):
                         value = int(i.text)
                         dup = list_ins.search_binary_dup(i.get("dron"))
+                        if not self.list_dron.verify_dup(i.get("dron")):
+                            error_msgbox(
+                                "Error",
+                                f"El dron {i.get('dron')} no esta en la lista de drones\nNo se agregará el sistema",
+                            )
+                            continue
                         if dup:
                             value -= dup
                         list_ins.insert(i.get("dron"), value)

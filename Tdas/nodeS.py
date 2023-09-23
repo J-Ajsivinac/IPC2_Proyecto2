@@ -1,9 +1,6 @@
-from Tdas.nodeD import NodeDrone
-
-
-class NodeSistem(NodeDrone):
+class NodeSistem:
     def __init__(self, i_d, value):
-        super().__init__(i_d, None, None)
+        self.i_d = i_d
         self.value = value
         self.last_node = None
         self.next_node = None
