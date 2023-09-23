@@ -150,17 +150,27 @@ class WindowP(QWidget):
     def p_dron(self):
         self.panel_2 = QWidget(self)
         self.layout_2 = QVBoxLayout(self.panel_2)
-        # self.label2 = QLabel("Has seleccionado la opción 2", self.panel_2)
-        # self.layout_2.addWidget(self.label2)
-        # self.panel_2.setStyleSheet("background-color: #FFB6C1;")
         self.panel_add = QWidget(self.panel_2)
         self.layout_add = QHBoxLayout(self.panel_add)
         self.text_add = QLineEdit()
-        self.btn_add = QPushButton("Agregar")
-        self.btn_add.clicked.connect(self.print_input)
+        self.text_add.setPlaceholderText("Escriba el nombre del Dron")
+        self.text_add.setStyleSheet(
+            """
+    QLineEdit {
+        border: 0px;
+        border-radius: 4px;
+        color:white;
+        padding: 6px 8px;
+        background: #332F40;
+        selection-background-color: #3D384D;
+    }
+"""
+        )
+        self.btn_add = self.custom_button_form("Agregar", self.print_input)
+        self.btn_add.setFixedSize(QtCore.QSize(120, 31))
         self.layout_add.addWidget(self.text_add)
         self.layout_add.addWidget(self.btn_add)
-        self.panel_add.setFixedHeight(40)
+        self.panel_add.setFixedHeight(50)
 
         self.panel_table = QWidget(self.panel_2)
         self.layout_table = QVBoxLayout(self.panel_table)
@@ -169,26 +179,30 @@ class WindowP(QWidget):
         self.table.setColumnCount(1)
 
         self.header = self.table.horizontalHeader()
-        self.header.setStyleSheet("QHeaderView::section { background-color: #555 }")
+        self.header.setStyleSheet(
+            "QHeaderView::section { background-color: #141519;color:#ffffff;border:0px;}"
+        )
         self.header_vertical = self.table.verticalHeader()
         self.header_vertical.setStyleSheet(
-            "QHeaderView::section { background-color: #555 }"
+            "QHeaderView::section { background-color: #141519;color:#ffffff;border:0px }"
         )
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Dron"))
         self.header.setSectionResizeMode(QHeaderView.Stretch)
         self.table.setStyleSheet(
             """
                 QTableWidget {
-                    background-color: #333;
-                    gridline-color: #555;
+                    background-color: #2a2a36;
+                    gridline-color: #292a2f;
+                    border:0px;
+                    border-radius:10px;
                 }
                 QTableWidget::item {
-                    color: #fff;
+                    color: #ffffff;
                 }
                 QTableWidget::item:selected {
-                    background-color: #000;
+                    background-color: #343442;
                 }
-                QTableCornerButton::section { background-color: #555 }
+                QTableCornerButton::section { background-color: #2a2a36 }
             """
         )
         self.layout_table.addWidget(self.table)
@@ -225,6 +239,31 @@ class WindowP(QWidget):
             QPushButton:pressed {
                 background-color: #3C3C4D;
                 color: #ffffff;
+            }
+        """
+        )
+        boton.clicked.connect(funcion)
+        return boton
+
+    def custom_button_form(self, texto, funcion=None):
+        boton = QPushButton(texto)
+        boton.setStyleSheet(
+            """
+            QPushButton {
+                background-color: #73bcf6;
+                color: #2a3343;
+                border: 0px;
+                font-weight:500;
+                border-radius: 5px;
+                text-align: center;
+            }
+            QPushButton:hover {
+                background-color: #67A7DB;
+                color: #2a3343;
+            }
+            QPushButton:pressed {
+                background-color: #5B94C2;
+                color: #202733;
             }
         """
         )
