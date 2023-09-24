@@ -1,5 +1,6 @@
 from Tdas.nodeD import NodeDrone
 from components.customMessage import *
+from Tdas.mainS import MainSistem
 
 
 class LinkedListDrone:
@@ -66,9 +67,35 @@ class LinkedListDrone:
         if not current:
             return False
         if not prev:
-            return True
+            return current
 
-        return True
+        return current
+
+    def s_search_b_hight(self, name):
+        if not self.first:
+            return None
+
+        left = self.first
+        right = self.end
+
+        while left is not None and right is not None and left != right:
+            mid = left
+            while mid.next_node != right:
+                mid = mid.next_node
+
+            if left.i_d == name:
+                return left
+            if right.i_d == name:
+                return right
+            if mid.i_d == name:
+                return mid
+
+            if name < mid.i_d:
+                right = mid
+            else:
+                left = mid.next_node
+
+        return None
 
     def print_drone(self):
         current = self.first
@@ -88,3 +115,14 @@ class LinkedListDrone:
             print(current.i_d)
             current.value.print_d()
             current = current.next_node
+
+    def call_optimize(self, list_instructions):
+        current = self.first
+        temp = None
+
+        while current:
+            print(current.value)
+            # matrix = MainSistem()
+            current.value.optimize()
+            current = current.next_node
+            # print(temp)

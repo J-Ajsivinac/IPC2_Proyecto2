@@ -1,5 +1,4 @@
 from Tdas.doublyLinkedList import DoublyLinkedListSistem
-from Tdas.linkedListD import LinkedListDrone
 
 
 class MainSistem:
@@ -11,9 +10,6 @@ class MainSistem:
     # name, id
     def create_matrix(self, hight, row):
         self.rows.insert_sorter(hight, row)
-
-    def verify_dup_row(self, value):
-        pass
 
     def display_matrix(self, name_system):
         current = self.rows.first
@@ -36,3 +32,6 @@ class MainSistem:
                 print(temp.i_d)
                 temp = temp.next_node
             current = current.next_node
+
+    def optimize_t(self):
+        pass

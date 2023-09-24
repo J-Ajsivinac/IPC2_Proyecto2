@@ -12,12 +12,13 @@ class Read:
 
     def load_data(self, list_dron, list_sistem, list_messages):
         self.list_dron: LinkedListDrone = list_dron
+        self.list_sistem: LinkedListDrone = list_sistem
         self.load_drones(list_dron)
         self.load_list_drone(list_sistem)
         self.load_list_mes(list_messages)
         # list_dron.print_drone()
-        list_sistem.print_temp()
-        # list_messages.print_temp1()
+        # list_sistem.print_temp()
+        list_messages.print_temp1()
 
     def load_drones(self, list_ori: LinkedListDrone):
         for list_d in self.root.findall("listaDrones"):
@@ -54,19 +55,38 @@ class Read:
             for message in m_list.findall("Mensaje"):
                 message_name = message.get("nombre")
                 system_name = message.findtext("sistemaDrones")
-                # matrix_temp = MainSistem()
                 list_ins = DoublyLinkedListSistem()
+                validate = self.list_sistem.verify_dup(system_name)
+                # print(validate.value.col_limit)
                 for instructions in message.findall("instrucciones"):
                     for i in instructions.findall("instruccion"):
                         value = int(i.text)
-                        dup = list_ins.search_binary_dup(i.get("dron"))
+                        dup = list_ins.search_from_end(i.get("dron"))
+                        # dup = list_ins.search_from_end(i.get("dron"))
+
+                        if not validate:
+                            error_msgbox(
+                                "Error",
+                                f"El dron {i.get('dron')} no esta en la lista de drones\nNo se agregará el sistema",
+                            )
+                            continue
+
                         if not self.list_dron.verify_dup(i.get("dron")):
                             error_msgbox(
                                 "Error",
                                 f"El dron {i.get('dron')} no esta en la lista de drones\nNo se agregará el sistema",
                             )
                             continue
+                        # values = self.list_sistem.s_search_binary(i.get("dron"))
+                        if int(i.text) > validate.value.col_limit:
+                            error_msgbox(
+                                "Error",
+                                f"La altura {i.text} esta fuera de rango\nLimite: {validate.value.col_limit}\nSistema de dron: {system_name}",
+                            )
+                            continue
+                        # print(values, i.get("dron"))
                         if dup:
-                            value -= dup
-                        list_ins.insert(i.get("dron"), value)
+                            value -= dup.h_inst
+                            # print(dup.value)
+                        list_ins.insert(i.get("dron"), value, int(i.text))
                 list_ori.insert_sorted(message_name, list_ins, system_name)

@@ -26,6 +26,7 @@ class WindowP(QWidget):
         self.drone_list = LinkedListDrone()
         self.s_list = LinkedListDrone()
         self.m_list = LinkedListDrone()
+        self.inst_list = LinkedListDrone()
         self.initUI()
 
     def initUI(self):
@@ -293,3 +294,4 @@ class WindowP(QWidget):
             read = Read()
             read.read_file(str(archivo))
             read.load_data(self.drone_list, self.s_list, self.m_list)
+            # self.m_list.call_optimize(self.inst_list)
