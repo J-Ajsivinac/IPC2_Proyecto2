@@ -12,3 +12,7 @@
 <div align="center"> 📆 Segundo Semestre 2023</div>
 
 <br>
+
+## Requerimientos
+* Python 3.11.5 o superior
+* PySide 6 v6.5.2 o superior
