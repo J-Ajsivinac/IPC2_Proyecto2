@@ -133,6 +133,7 @@ class WindowP(QWidget):
     def p_dron(self):
         self.panel_2 = QWidget(self)
         self.layout_2 = QVBoxLayout(self.panel_2)
+        self.layout_2.setSpacing(0)
         self.panel_add = QWidget(self.panel_2)
         self.layout_add = QHBoxLayout(self.panel_add)
         self.text_add = QLineEdit()
@@ -155,6 +156,13 @@ class WindowP(QWidget):
         self.layout_add.addWidget(self.btn_add)
         self.panel_add.setFixedHeight(50)
 
+        self.panel_title_t = QWidget(self.panel_2)
+        self.layout_title_t = QHBoxLayout(self.panel_title_t)
+        self.label_title1 = QLabel("Listado de Drones")
+        self.label_title1.setStyleSheet("QLabel { color:#ffffff; padding:0 }")
+        self.layout_title_t.addWidget(self.label_title1)
+        self.panel_title_t.setFixedHeight(32)
+
         self.panel_table = QWidget(self.panel_2)
         self.layout_table = QVBoxLayout(self.panel_table)
         self.table = QTableWidget()
@@ -169,7 +177,7 @@ class WindowP(QWidget):
         self.header_vertical.setStyleSheet(
             "QHeaderView::section { background-color: #141519;color:#ffffff;border:0px }"
         )
-        self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Dron"))
+        self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Nombre"))
         self.header.setSectionResizeMode(QHeaderView.Stretch)
         self.table.setStyleSheet(
             """
@@ -190,6 +198,7 @@ class WindowP(QWidget):
         )
         self.layout_table.addWidget(self.table)
         self.layout_2.addWidget(self.panel_add)
+        self.layout_2.addWidget(self.panel_title_t)
         self.layout_2.addWidget(self.panel_table)
 
     def data_dron(self):
@@ -294,4 +303,4 @@ class WindowP(QWidget):
             read = Read()
             read.read_file(str(archivo))
             read.load_data(self.drone_list, self.s_list, self.m_list)
-            # self.m_list.call_optimize(self.inst_list)
+            # .call_optimize(self.s_list)

@@ -1,4 +1,5 @@
 from Tdas.nodeD import NodeDrone
+from Tdas.nodeM import NodeMessage
 from components.customMessage import *
 from Tdas.mainS import MainSistem
 
@@ -13,8 +14,8 @@ class LinkedListDrone:
         return self.first is None
 
     # Nombre, matriz
-    def insert(self, i_d, value=None, temp=None):
-        new_node = NodeDrone(i_d, value, temp)
+    def insert(self, i_d, value=None):
+        new_node = NodeDrone(i_d, value)
         if self.is_empty():
             self.first = new_node
             self.end = new_node
@@ -27,14 +28,38 @@ class LinkedListDrone:
         self.end = current.next_node
         self.size += 1
 
-    def insert_sorted(self, i_d, value=None, temp=None):
+    def insert_sorted(self, i_d, value=None):
         if self.verify_dup(i_d):
-            error_msgbox("Error", f"El nombre {i_d} ya está registrado")
+            error_msgbox("Error", f"El nombre {i_d} ya está registrado --")
             return
 
         if not i_d:
             i_d = self.size + 1
-        new_data = NodeDrone(i_d, value, temp)
+        new_data = NodeDrone(i_d, value)
+        if self.is_empty():
+            self.first = new_data
+            self.end = new_data
+            new_data.next_node = None
+        elif self.first.i_d > i_d:
+            temp = self.first
+            new_data.next_node = self.first
+            self.first = new_data
+            if not new_data.next_node:
+                self.end = temp
+        else:
+            current = self.first
+            while current.next_node and current.next_node.i_d < i_d:
+                current = current.next_node
+            new_data.next_node = current.next_node
+            current.next_node = new_data
+        self.size += 1
+
+    def insert_sorted_msg(self, i_d, value, name_system, max_c):
+        if self.verify_dup(i_d):
+            error_msgbox("Error", f"El nombre {i_d} ya está registrado")
+            return
+
+        new_data = NodeMessage(i_d, value, name_system, max_c)
         if self.is_empty():
             self.first = new_data
             self.end = new_data
@@ -58,14 +83,14 @@ class LinkedListDrone:
         prev = None
 
         if self.size == 0:
-            return False
+            return None
 
         while current and current.i_d != name:
             prev = current
             current = current.next_node
 
         if not current:
-            return False
+            return None
         if not prev:
             return current
 
@@ -116,13 +141,25 @@ class LinkedListDrone:
             current.value.print_d()
             current = current.next_node
 
-    def call_optimize(self, list_instructions):
+    def call_optimize(self, list_sistem):
         current = self.first
         temp = None
 
         while current:
-            print(current.value)
-            # matrix = MainSistem()
-            current.value.optimize()
+            print(current.i_d)
+            matrix = MainSistem(columns=current.max_columns)
+
+            validate = list_sistem.verify_dup(current.name_system)
+
+            current_dron = validate.value.rows.first
+
+            for _ in range(matrix.col_limit):
+                temp = LinkedListDrone()
+                matrix.create_matrix_instr(current_dron.i_d, temp)
+                # print(current_dron.i_d)
+                current_dron = current_dron.next_node
+                # dron_name = dron_name.next_node
+            # print(matrix.rows)
+            current.value.optimize(matrix)
             current = current.next_node
             # print(temp)

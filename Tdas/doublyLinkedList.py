@@ -67,7 +67,7 @@ class DoublyLinkedListSistem:
                 return mid
 
             if name < mid.i_d:
-                right = mid
+                right = mid.last_node
             else:
                 left = mid.next_node
 
@@ -102,6 +102,13 @@ class DoublyLinkedListSistem:
             current = current.next_node
         return list_temp
 
-    def optimize(self):
+    def optimize(self, matrix):
         list_temp = self.crete_temp()
         current = list_temp.first
+        # print(matrix.col_limit)
+        dron_imp = current.i_d
+        while current:
+            h = current.value
+            # for _ in range(h):
+            matrix.instructions(list_temp)
+            current = current.next_node

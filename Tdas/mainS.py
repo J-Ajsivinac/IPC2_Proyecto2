@@ -11,6 +11,9 @@ class MainSistem:
     def create_matrix(self, hight, row):
         self.rows.insert_sorter(hight, row)
 
+    def create_matrix_instr(self, hight, row):
+        self.rows.insert(hight, row)
+
     def display_matrix(self, name_system):
         current = self.rows.first
         print(name_system)
@@ -33,5 +36,20 @@ class MainSistem:
                 temp = temp.next_node
             current = current.next_node
 
-    def optimize_t(self):
-        pass
+    def instructions(self, list_temp):
+        left = self.rows.first
+        right = self.rows.end
+        p_drone = list_temp.first.i_d
+        current_dron = list_temp.first
+        while left and right:
+            print(f"left: {left.value}")
+            # print(f"right: {right.i_d}")
+            left = left.next_node
+            right = right.last_node
+
+            if left.i_d > right.i_d:
+                break
+
+            if left.i_d == right.i_d:
+                print(f"igual:{left.i_d}")
+                break
