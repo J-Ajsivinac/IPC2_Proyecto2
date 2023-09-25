@@ -36,20 +36,82 @@ class MainSistem:
                 temp = temp.next_node
             current = current.next_node
 
-    def instructions(self, list_temp):
+    def instructions(self, list_temp, number):
         left = self.rows.first
         right = self.rows.end
         p_drone = list_temp.first.i_d
-        current_dron = list_temp.first
+        # print(current_dron.i_d)
         while left and right:
-            print(f"left: {left.value}")
-            # print(f"right: {right.i_d}")
-            left = left.next_node
-            right = right.last_node
-
             if left.i_d > right.i_d:
                 break
 
             if left.i_d == right.i_d:
-                print(f"igual:{left.i_d}")
+                # print(f"--{left.i_d},{right.value}")
+                search = list_temp.search_binary_dup(right.i_d)
+                # print("value", search.value)
+                if not search:
+                    left.value.insert(number, "Esperar")
+                elif search.value > 0:
+                    # print("Subir", right.i_d)
+                    left.value.insert(number, "Subir")
+                    search.value -= 1
+                elif search.value < 0:
+                    # print("Bajar", right.i_d)
+                    left.value.insert(number, "Bajar")
+                    search.value += 1
+                elif search.value == 0:
+                    if search.i_d == p_drone:
+                        # print("Encender", right.i_d)
+                        left.value.insert(number, "Encender")
+                        # search.value -= 1
+                    else:
+                        # print("Esperar", right.i_d)
+                        left.value.insert(number, "Esperar")
                 break
+
+            if left:
+                search = list_temp.search_binary_dup(left.i_d)
+
+                if not search:
+                    left.value.insert(number, "Esperar")
+
+                elif search.value > 0:
+                    # print("Subir", left.i_d)
+                    left.value.insert(number, "Subir")
+                    search.value -= 1
+                elif search.value < 0:
+                    # print("Bajar", left.i_d)
+                    left.value.insert(number, "Bajar")
+                    search.value += 1
+                elif search.value == 0:
+                    if search.i_d == p_drone:
+                        # print("Encender", left.i_d)
+                        left.value.insert(number, "Encender")
+                        # search.value -= 1
+                    else:
+                        # print("Esperar", left.i_d)
+                        left.value.insert(number, "Esperar")
+
+            if right:
+                search = list_temp.search_binary_dup(right.i_d)
+                if not search:
+                    right.value.insert(number, "Esperar")
+                elif search.value > 0:
+                    # print("Subir", right.i_d)
+                    right.value.insert(number, "Subir")
+                    search.value -= 1
+                elif search.value < 0:
+                    # print("Bajar", right.i_d)
+                    right.value.insert(number, "Bajar")
+                    search.value += 1
+                elif search.value == 0:
+                    if search.i_d == p_drone:
+                        # print("Encender", right.i_d)
+                        right.value.insert(number, "Encender")
+                        search.value -= 1
+                    else:
+                        # print("Esperar", right.i_d)
+                        right.value.insert(number, "Esperar")
+
+            left = left.next_node
+            right = right.last_node

@@ -141,25 +141,25 @@ class LinkedListDrone:
             current.value.print_d()
             current = current.next_node
 
-    def call_optimize(self, list_sistem):
+    def call_optimize(self, list_sistem, list_proc):
         current = self.first
         temp = None
 
         while current:
-            print(current.i_d)
+            if current.processed:
+                current = current.next_node
+                continue
             matrix = MainSistem(columns=current.max_columns)
-
             validate = list_sistem.verify_dup(current.name_system)
-
             current_dron = validate.value.rows.first
 
             for _ in range(matrix.col_limit):
                 temp = LinkedListDrone()
                 matrix.create_matrix_instr(current_dron.i_d, temp)
-                # print(current_dron.i_d)
                 current_dron = current_dron.next_node
-                # dron_name = dron_name.next_node
-            # print(matrix.rows)
-            current.value.optimize(matrix)
+
+            message = current.value.decode(validate.value)
+            count = current.value.optimize(matrix)
+            current.processed = True
+            list_proc.insert_sorted_msg(current.i_d, matrix, message, count)
             current = current.next_node
-            # print(temp)
