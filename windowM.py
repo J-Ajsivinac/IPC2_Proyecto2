@@ -53,9 +53,7 @@ class WindowP(QWidget):
         self.btn_view_d = self.custom_button("Drones", self.change_view_dron)
         # self.btn_view_list = self.custom_button("Sistemas de Drones")
         self.btn_messages = self.custom_button("Mensajes", self.change_view_m)
-        self.btn_help = self.custom_button(
-            "Ayuda", lambda: self.stack.setCurrentIndex(3)
-        )
+        self.btn_help = self.custom_button("Ayuda", self.change_view_help)
         self.layout_sidebar.addWidget(self.btn_generate)
         self.layout_sidebar.addWidget(self.btn_view_d)
         self.layout_sidebar.addWidget(self.btn_messages)
@@ -63,12 +61,7 @@ class WindowP(QWidget):
         self.layout_sidebar.addStretch(1)
 
         self.p_start()
-
-        self.panel_4 = QWidget(self)
-        self.layout_4 = QVBoxLayout(self.panel_4)
-        self.label4 = QLabel("Has seleccionado la opción 4", self.panel_4)
-        self.layout_4.addWidget(self.label4)
-        self.panel_4.setStyleSheet("background-color: #000000;")
+        self.p_help()
 
         self.p_dron()
         self.p_message()
@@ -127,6 +120,10 @@ class WindowP(QWidget):
     def change_view_m(self):
         self.stack.setCurrentIndex(2)
         self.data_messages()
+
+    def change_view_help(self):
+        self.stack.setCurrentIndex(3)
+        # self.data_messages()
 
     def p_dron(self):
         self.panel_2 = QWidget(self)
@@ -279,6 +276,59 @@ class WindowP(QWidget):
 
         self.layout_3.addWidget(panel_message)
         # self.layout_3.addWidget(panel_instructions)
+
+    def p_help(self):
+        self.panel_4 = QWidget(self)
+        self.layout_4 = QVBoxLayout(self.panel_4)
+        self.panel_4.setFixedHeight(200)
+        panel_data = QWidget(self.panel_4)
+        layout_data = QVBoxLayout(panel_data)
+
+        label_title = QLabel("Datos del Estudiante")
+        # panel_data.setFixedHeight(200)
+
+        panel_prin = QWidget(panel_data)
+        layout_prin = QVBoxLayout(panel_prin)
+        layout_prin.setContentsMargins(0, 0, 0, 0)
+        label_img = QLabel("Joab Israel Ajsivinac Ajsivinac")
+        label_cl = QLabel('Introducción a la Programación y computación 2 sección "N"')
+        layout_prin.addWidget(label_img)
+
+        panel_info = QWidget(panel_prin)
+        layout_info = QHBoxLayout(panel_info)
+
+        panel_data5 = QWidget(panel_info)
+        layout_data5 = QVBoxLayout(panel_data5)
+        label_t1 = QLabel("Carné")
+        label_c = QLabel("202200135")
+        layout_data5.addWidget(label_t1)
+        layout_data5.addWidget(label_c)
+
+        panel_data1 = QWidget(panel_info)
+        layout_data1 = QVBoxLayout(panel_data1)
+        label_t2 = QLabel("Carrera")
+        label_c2 = QLabel("Ingeniería en Ciencias y Sistemas")
+        layout_data1.addWidget(label_t2)
+        layout_data1.addWidget(label_c2)
+
+        panel_data2 = QWidget(panel_info)
+        layout_data2 = QVBoxLayout(panel_data2)
+        label_t3 = QLabel("Semestre")
+        label_c3 = QLabel("Cuarto")
+        layout_data2.addWidget(label_t3)
+        layout_data2.addWidget(label_c3)
+
+        layout_data.addWidget(label_title)
+        layout_data.addWidget(panel_prin)
+
+        layout_prin.addWidget(panel_info)
+
+        layout_info.addWidget(panel_data5)
+        layout_info.addWidget(panel_data1)
+        layout_info.addWidget(panel_data2)
+        layout_prin.addWidget(label_cl)
+        self.panel_4.setStyleSheet("background-color: #2a2a36;")
+        self.layout_4.addWidget(panel_data)
 
     def data_dron(self):
         current = self.drone_list.first
