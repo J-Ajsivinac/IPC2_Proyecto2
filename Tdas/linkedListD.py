@@ -2,6 +2,7 @@ from Tdas.nodeD import NodeDrone
 from Tdas.nodeM import NodeMessage
 from components.customMessage import *
 from Tdas.mainS import MainSistem
+import copy
 
 
 class LinkedListDrone:
@@ -142,7 +143,7 @@ class LinkedListDrone:
             current = current.next_node
 
     def call_optimize(self, list_sistem, list_proc):
-        current = self.first
+        current = copy.deepcopy(self.first)
         temp = None
 
         while current:
@@ -162,4 +163,4 @@ class LinkedListDrone:
             count = current.value.optimize(matrix)
             current.processed = True
             list_proc.insert_sorted_msg(current.i_d, matrix, message, count)
-            current = current.next_node
+            current = copy.deepcopy(current.next_node)

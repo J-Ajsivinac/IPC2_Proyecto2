@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
     QHeaderView,
+    QTextEdit,
 )
 from PySide6.QtGui import QFont
 from PySide6 import QtCore
@@ -51,9 +52,7 @@ class WindowP(QWidget):
         )
         self.btn_view_d = self.custom_button("Drones", self.change_view_dron)
         # self.btn_view_list = self.custom_button("Sistemas de Drones")
-        self.btn_messages = self.custom_button(
-            "Mensajes", lambda: self.stack.setCurrentIndex(2)
-        )
+        self.btn_messages = self.custom_button("Mensajes", self.change_view_m)
         self.btn_help = self.custom_button(
             "Ayuda", lambda: self.stack.setCurrentIndex(3)
         )
@@ -65,12 +64,6 @@ class WindowP(QWidget):
 
         self.p_start()
 
-        self.panel_3 = QWidget(self)
-        self.layout_3 = QVBoxLayout(self.panel_3)
-        self.label3 = QLabel("Has seleccionado la opción 3", self.panel_3)
-        self.layout_3.addWidget(self.label3)
-        self.panel_3.setStyleSheet("background-color: #FFFFFF;")
-
         self.panel_4 = QWidget(self)
         self.layout_4 = QVBoxLayout(self.panel_4)
         self.label4 = QLabel("Has seleccionado la opción 4", self.panel_4)
@@ -78,7 +71,7 @@ class WindowP(QWidget):
         self.panel_4.setStyleSheet("background-color: #000000;")
 
         self.p_dron()
-
+        self.p_message()
         self.stack.addWidget(self.panel_right)
         self.stack.addWidget(self.panel_2)
         self.stack.addWidget(self.panel_3)
@@ -131,6 +124,10 @@ class WindowP(QWidget):
         self.stack.setCurrentIndex(1)
         self.data_dron()
 
+    def change_view_m(self):
+        self.stack.setCurrentIndex(2)
+        self.data_messages()
+
     def p_dron(self):
         self.panel_2 = QWidget(self)
         self.layout_2 = QVBoxLayout(self.panel_2)
@@ -172,7 +169,14 @@ class WindowP(QWidget):
 
         self.header = self.table.horizontalHeader()
         self.header.setStyleSheet(
-            "QHeaderView::section { background-color: #141519;color:#ffffff;border:0px;}"
+            """
+            QHeaderView::section 
+            { 
+                background-color: #141519;
+                color:#ffffff;border:0px;
+                border-top-left-radius:10px;
+                border-top-right-radius:10px;
+            }"""
         )
         self.header_vertical = self.table.verticalHeader()
         self.header_vertical.setStyleSheet(
@@ -197,10 +201,84 @@ class WindowP(QWidget):
                 QTableCornerButton::section { background-color: #2a2a36 }
             """
         )
+
         self.layout_table.addWidget(self.table)
+
+        self.panel_system = QWidget(self.panel_2)
+        self.layout_system = QVBoxLayout(self.panel_system)
+
+        self.lable_system = QLabel("Sistema de Drones")
+        self.btn_graph_system = QPushButton("Graficar")
+
+        self.layout_system.addWidget(self.lable_system)
+        self.layout_system.addWidget(self.btn_graph_system)
+
         self.layout_2.addWidget(self.panel_add)
         self.layout_2.addWidget(self.panel_title_t)
         self.layout_2.addWidget(self.panel_table)
+        self.layout_2.addWidget(self.panel_system)
+
+    def p_message(self):
+        self.panel_3 = QWidget(self)
+        self.layout_3 = QVBoxLayout(self.panel_3)
+        self.panel_3.setStyleSheet("background-color: #202029;")
+        panel_message = QWidget(self.panel_3)
+        layout_message = QVBoxLayout(panel_message)
+        label_mesages = QLabel("Listado de Mensajes")
+        self.table_messages = QTableWidget()
+        self.table_messages.setColumnCount(4)
+        self.table_messages.setHorizontalHeaderItem(0, QTableWidgetItem("Nombre"))
+        self.table_messages.setHorizontalHeaderItem(
+            1, QTableWidgetItem("Instrucciones")
+        )
+        self.table_messages.setHorizontalHeaderItem(
+            2, QTableWidgetItem("Instrucciones Enviadas")
+        )
+
+        self.table_messages.setHorizontalHeaderItem(3, QTableWidgetItem("Gráfica"))
+        header_messages = self.table_messages.horizontalHeader()
+        # header_messages.setSectionResizeMode(QHeaderView.Stretch)
+        header_messages.resizeSection(0, 180)
+        header_messages.resizeSection(1, 187)
+        header_messages.resizeSection(2, 208)
+        header_messages.resizeSection(3, 158)
+
+        layout_message.addWidget(label_mesages)
+        self.table_messages.setStyleSheet(
+            """
+                QTableWidget {
+                    background-color: #2a2a36;
+                    gridline-color: #292a2f;
+                    border:0px;
+                    border-radius:10px;
+                }
+                QTableWidget::item {
+                    color: #ffffff;
+                }
+                QTableWidget::item:selected {
+                    background-color: #343442;
+                }
+                QTableCornerButton::section { background-color: #2a2a36 }
+            """
+        )
+        layout_message.addWidget(self.table_messages)
+
+        # panel_instructions = QWidget(self.panel_3)
+        # layout_instructions = QVBoxLayout(panel_instructions)
+        # label_instructins = QLabel("Instrucciones a Enviar")
+        # table_instructions = QTableWidget()
+        # table_instructions.setColumnCount(2)
+        # table_instructions.setHorizontalHeaderItem(0, QTableWidgetItem("Nombre"))
+        # table_instructions.setHorizontalHeaderItem(
+        #     1, QTableWidgetItem("Instrucciones enviadas")
+        # )
+        # header_instru = table_instructions.horizontalHeader()
+        # header_instru.setSectionResizeMode(QHeaderView.Stretch)
+        # layout_instructions.addWidget(label_instructins)
+        # layout_instructions.addWidget(table_instructions)
+
+        self.layout_3.addWidget(panel_message)
+        # self.layout_3.addWidget(panel_instructions)
 
     def data_dron(self):
         current = self.drone_list.first
@@ -212,6 +290,42 @@ class WindowP(QWidget):
             self.table.setItem(i, 0, item)
             i += 1
             current = current.next_node
+
+    def data_messages(self):
+        current = self.processed.first
+        current_inst = self.m_list.first
+        i = 0
+        self.table_messages.setRowCount(0)
+        while current:
+            self.table_messages.insertRow(self.table_messages.rowCount())
+            self.table_messages.setRowHeight(i, 80)
+            for j in range(4):
+                item = None
+                if j == 0:
+                    item = QTableWidgetItem(f"{current.i_d}")
+                elif j == 1:
+                    item = QTextEdit()
+                    current_v = current_inst.value.first
+                    while current_v:
+                        item.append(f"{current_v.i_d},{current_v.h_inst}")
+                        current_v = current_v.next_node
+                    self.table_messages.setCellWidget(i, j, item)
+                    continue
+                elif j == 2:
+                    item = QPushButton("Información")
+                    item.setFixedSize(QtCore.QSize(110, 31))
+                    self.table_messages.setCellWidget(i, j, item)
+                    continue
+                elif j == 3:
+                    item = QPushButton("Gráfica")
+                    item.setFixedSize(QtCore.QSize(110, 31))
+                    self.table_messages.setCellWidget(i, j, item)
+                    continue
+                self.table_messages.setItem(i, j, item)
+            # print(current.i_d, current.value, current.name_system, current_inst.value)
+            i += 1
+            current = current.next_node
+            current_inst = current_inst.next_node
 
     def custom_button(self, texto, funcion=None):
         boton = QPushButton(texto)
