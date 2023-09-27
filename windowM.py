@@ -12,13 +12,16 @@ from PySide6.QtWidgets import (
     QTableWidgetItem,
     QHeaderView,
     QTextEdit,
+    QComboBox,
 )
 from PySide6.QtGui import QFont
 from PySide6 import QtCore
 import sys
 from modules.readFiles import Read
+from modules.writeFile import Write
 from Tdas.linkedListD import LinkedListDrone
 from components.customMessage import *
+from modules.graph import Graph
 
 
 class WindowP(QWidget):
@@ -93,7 +96,7 @@ class WindowP(QWidget):
         self.layout_init = QHBoxLayout(self.panel_init)
         self.btn_init = self.big_buttons("Inicializari Sistema")
         self.btn_open = self.big_buttons("Cargar Archivo", self.show_dialog)
-        self.btn_create = self.big_buttons("Generar Archivo")
+        self.btn_create = self.big_buttons("Generar Archivo", self.create_xml)
         self.layout_init.addWidget(self.btn_init)
         self.layout_init.addWidget(self.btn_open)
         self.layout_init.addWidget(self.btn_create)
@@ -206,7 +209,7 @@ class WindowP(QWidget):
 
         self.lable_system = QLabel("Sistema de Drones")
         self.btn_graph_system = QPushButton("Graficar")
-
+        self.btn_graph_system.clicked.connect(self.graph_system)
         self.layout_system.addWidget(self.lable_system)
         self.layout_system.addWidget(self.btn_graph_system)
 
@@ -223,22 +226,13 @@ class WindowP(QWidget):
         layout_message = QVBoxLayout(panel_message)
         label_mesages = QLabel("Listado de Mensajes")
         self.table_messages = QTableWidget()
-        self.table_messages.setColumnCount(4)
+        self.table_messages.setColumnCount(2)
         self.table_messages.setHorizontalHeaderItem(0, QTableWidgetItem("Nombre"))
         self.table_messages.setHorizontalHeaderItem(
             1, QTableWidgetItem("Instrucciones")
         )
-        self.table_messages.setHorizontalHeaderItem(
-            2, QTableWidgetItem("Instrucciones Enviadas")
-        )
-
-        self.table_messages.setHorizontalHeaderItem(3, QTableWidgetItem("Gráfica"))
         header_messages = self.table_messages.horizontalHeader()
-        # header_messages.setSectionResizeMode(QHeaderView.Stretch)
-        header_messages.resizeSection(0, 180)
-        header_messages.resizeSection(1, 187)
-        header_messages.resizeSection(2, 208)
-        header_messages.resizeSection(3, 158)
+        header_messages.setSectionResizeMode(QHeaderView.Stretch)
 
         layout_message.addWidget(label_mesages)
         self.table_messages.setStyleSheet(
@@ -260,22 +254,31 @@ class WindowP(QWidget):
         )
         layout_message.addWidget(self.table_messages)
 
-        # panel_instructions = QWidget(self.panel_3)
-        # layout_instructions = QVBoxLayout(panel_instructions)
-        # label_instructins = QLabel("Instrucciones a Enviar")
-        # table_instructions = QTableWidget()
-        # table_instructions.setColumnCount(2)
-        # table_instructions.setHorizontalHeaderItem(0, QTableWidgetItem("Nombre"))
-        # table_instructions.setHorizontalHeaderItem(
-        #     1, QTableWidgetItem("Instrucciones enviadas")
-        # )
-        # header_instru = table_instructions.horizontalHeader()
-        # header_instru.setSectionResizeMode(QHeaderView.Stretch)
-        # layout_instructions.addWidget(label_instructins)
-        # layout_instructions.addWidget(table_instructions)
+        panel_instructions = QWidget(self.panel_3)
+        layout_instructions = QVBoxLayout(panel_instructions)
+        label_instructins = QLabel("Instrucciones a Enviar")
+        layout_instructions.addWidget(label_instructins)
+
+        panel_data = QWidget(panel_instructions)
+        layout_data = QHBoxLayout(panel_data)
+        self.combo = QComboBox()
+        self.combo.setStyleSheet(
+            """
+    QComboBox {
+        background-color: #272727;
+        color: #ffffff;
+    }
+"""
+        )
+        btn_data = QPushButton("Ver Información")
+        btn_graph = QPushButton("Gráficar")
+        layout_data.addWidget(self.combo)
+        layout_data.addWidget(btn_data)
+        layout_data.addWidget(btn_graph)
+        layout_instructions.addWidget(panel_data)
 
         self.layout_3.addWidget(panel_message)
-        # self.layout_3.addWidget(panel_instructions)
+        self.layout_3.addWidget(panel_instructions)
 
     def p_help(self):
         self.panel_4 = QWidget(self)
@@ -349,26 +352,17 @@ class WindowP(QWidget):
         while current:
             self.table_messages.insertRow(self.table_messages.rowCount())
             self.table_messages.setRowHeight(i, 80)
-            for j in range(4):
+            for j in range(2):
                 item = None
                 if j == 0:
                     item = QTableWidgetItem(f"{current.i_d}")
+                    self.combo.addItem(f"{current.i_d}")
                 elif j == 1:
                     item = QTextEdit()
                     current_v = current_inst.value.first
                     while current_v:
                         item.append(f"{current_v.i_d},{current_v.h_inst}")
                         current_v = current_v.next_node
-                    self.table_messages.setCellWidget(i, j, item)
-                    continue
-                elif j == 2:
-                    item = QPushButton("Información")
-                    item.setFixedSize(QtCore.QSize(110, 31))
-                    self.table_messages.setCellWidget(i, j, item)
-                    continue
-                elif j == 3:
-                    item = QPushButton("Gráfica")
-                    item.setFixedSize(QtCore.QSize(110, 31))
                     self.table_messages.setCellWidget(i, j, item)
                     continue
                 self.table_messages.setItem(i, j, item)
@@ -469,3 +463,13 @@ class WindowP(QWidget):
             read.read_file(str(archivo))
             read.load_data(self.drone_list, self.s_list, self.m_list)
             self.m_list.call_optimize(self.s_list, self.processed)
+            # self.processed.print_temp()
+
+    def create_xml(self):
+        w = Write("salida.xml")
+        w.write_document(self.processed)
+
+    def graph_system(self):
+        gr = Graph("grafica_sistema")
+        #self.s_list.print_temp()
+        gr.create_sistem(self.s_list)

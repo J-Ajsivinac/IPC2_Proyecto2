@@ -162,5 +162,7 @@ class LinkedListDrone:
             message = current.value.decode(validate.value)
             count = current.value.optimize(matrix)
             current.processed = True
-            list_proc.insert_sorted_msg(current.i_d, matrix, message, count)
+            list_proc.insert_sorted_msg(
+                current.i_d, matrix, message, current.name_system
+            )
             current = copy.deepcopy(current.next_node)
