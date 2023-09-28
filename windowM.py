@@ -470,6 +470,6 @@ class WindowP(QWidget):
         w.write_document(self.processed)
 
     def graph_system(self):
-        gr = Graph("grafica_sistema")
-        #self.s_list.print_temp()
+        gr = Graph("grafica_sistemas")
+        # self.s_list.print_temp()
         gr.create_sistem(self.s_list)

@@ -44,8 +44,11 @@ class Read:
                         continue
                     for Hight in content.findall("alturas"):
                         for h in Hight.findall("altura"):
+                            value = h.text
                             if int(h.get("valor")) <= int(h_limit):
-                                temp.insert_sorted(h.get("valor"), h.text)
+                                if value is None:
+                                    value = " "
+                                temp.insert_sorted(h.get("valor"), value)
                     matrix.create_matrix(dron, temp)
                 list_ori.insert_sorted(system_name, matrix)
                 # print(matrix.rows, system_name)

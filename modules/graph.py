@@ -5,18 +5,28 @@ from Tdas.linkedListD import LinkedListDrone
 class Graph:
     def __init__(self, name):
         self.name = name
-        self.dot = graphviz.Digraph(f"{name}", filename=f"{name}.gv", format="svg")
+        self.dot = graphviz.Digraph(
+            f"{name}",
+            filename=f"{name}.gv",
+            format="svg",
+            node_attr={"fontname": "Verdana"},
+        )
 
     def create_sistem(self, list_sys: LinkedListDrone):
         current = list_sys.first
         i = 0
         while current:
-            # print(current.i_d, current.value)
             with self.dot.subgraph(name=f"cluster_{i}") as cl:
-                # cl.node("header", label=f"{current.i_d}")
-                table_html = '<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="lightgrey">'
+                cl.attr(
+                    label=f"Sistema de Drones: {current.i_d}",
+                    labelloc="t",
+                    labeljust="c",
+                    bgcolor="#eff6ff",
+                    color="#bedbfe",
+                    style="rounded",
+                )
+                table_html = '<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4" BGCOLOR="white">'
 
-                # current_value = current.value
                 current_matrix = current.value.rows.first
                 rows = current_matrix.value.first
                 times = current_matrix.value.size
@@ -29,9 +39,9 @@ class Graph:
                         columns = temp.value.first
                         if m == 0:
                             if x == 0:
-                                table_html += "<TD>Altura (m)</TD>"
+                                table_html += '<TD BGCOLOR="#2c2c2c"><FONT COLOR="white">Altura (m)</FONT></TD>'
                             else:
-                                table_html += f"<TD>{temp.i_d}</TD>"
+                                table_html += f'<TD BGCOLOR="#2c2c2c"><FONT COLOR="white">{temp.i_d}</FONT></TD>'
                                 temp = temp.next_node
                         else:
                             if x == 0:
@@ -43,15 +53,21 @@ class Graph:
                                 temp = temp.next_node
                     if m != 1:
                         rows = rows.next_node
-                    # current_matrix = current.value.rows.first
                     table_html += "</TR>"
 
-                # current = current.next_node
                 table_html += "</TABLE>>"
-                # print(table_html)
-                # print()
-                cl.node(f"table_{i}", label=table_html)
+                cl.node(
+                    f"table_{i}",
+                    label=table_html,
+                    shape="none",
+                )
                 i += 1
                 current = current.next_node
+        self.generate()
 
-        self.dot.render(outfile=f"{self.name}.svg", format="svg", view=True)
+    def generate(self):
+        name = f"resultados/{self.name}.svg".replace("\\", "/")
+        try:
+            self.dot.render(outfile=name, format="svg", view=True)
+        except Exception as exce:
+            print(exce)
