@@ -13,9 +13,11 @@ from PySide6.QtWidgets import (
     QHeaderView,
     QTextEdit,
     QComboBox,
+    QToolButton,
 )
 from PySide6.QtGui import QFont
-from PySide6 import QtCore
+from PySide6 import QtCore, QtGui
+from PySide6.QtCore import Qt
 import sys
 from modules.readFiles import Read
 from modules.writeFile import Write
@@ -23,6 +25,7 @@ from Tdas.linkedListD import LinkedListDrone
 from components.customMessage import *
 from modules.graph import Graph
 import webbrowser
+from icons.iconos import Icons
 
 
 class WindowP(QWidget):
@@ -33,11 +36,19 @@ class WindowP(QWidget):
         self.m_list = LinkedListDrone()
         self.inst_list = LinkedListDrone()
         self.processed = LinkedListDrone()
+        self.sidebar_active = """ QPushButton {
+                background-color: #242833;
+                color: #b1b8fa;
+                border: 0px;
+                border-radius: 4px;
+                padding:12px 0 12px 15px;
+                text-align: left;
+            }"""
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle("Proyecto 2")
-        self.setStyleSheet("background-color: #202029;")
+        self.setStyleSheet(f"background-color: #171821;")
         self.layout_p = QVBoxLayout(self)
         self.layout_p.setContentsMargins(0, 0, 0, 0)
         self.splitter = QSplitter(self)
@@ -46,14 +57,12 @@ class WindowP(QWidget):
         # Sidebar
         self.sidebar = QWidget(self)
         self.layout_sidebar = QVBoxLayout(self.sidebar)
-        self.layout_sidebar.setContentsMargins(10, 220, 10, 10)
-        self.sidebar.setStyleSheet("background-color: #1c1c24;")
+        self.layout_sidebar.setContentsMargins(10, 208, 10, 10)
+        self.sidebar.setStyleSheet("background-color: #13151b;")
         self.sidebar.setFixedWidth(220)
         self.layout_sidebar.setSpacing(20)
 
-        self.btn_generate = self.custom_button(
-            "Inicio", lambda: self.stack.setCurrentIndex(0)
-        )
+        self.btn_generate = self.custom_button("Inicio", self.change_view_init)
         self.btn_view_d = self.custom_button("Drones", self.change_view_dron)
         # self.btn_view_list = self.custom_button("Sistemas de Drones")
         self.btn_messages = self.custom_button("Mensajes", self.change_view_m)
@@ -63,6 +72,8 @@ class WindowP(QWidget):
         self.layout_sidebar.addWidget(self.btn_messages)
         self.layout_sidebar.addWidget(self.btn_help)
         self.layout_sidebar.addStretch(1)
+
+        self.btn_generate.setStyleSheet(self.sidebar_active)
 
         self.p_start()
         self.p_help()
@@ -95,18 +106,24 @@ class WindowP(QWidget):
 
         self.panel_init = QWidget(self.panel_right)
         self.layout_init = QHBoxLayout(self.panel_init)
-        self.btn_init = self.big_buttons("Inicializari Sistema")
-        self.btn_open = self.big_buttons("Cargar Archivo", self.show_dialog)
-        self.btn_create = self.big_buttons("Generar Archivo", self.create_xml)
+        icon_init = QtGui.QIcon(Icons.BTN_RESET)
+        icon_upload = QtGui.QIcon(Icons.BTN_UPL)
+        icon_xml = QtGui.QIcon(Icons.BTN_XML)
+        self.btn_init = self.big_buttons("Inicializari Sistema", icon_init)
+
+        self.btn_open = self.big_buttons(
+            "Cargar Archivo", icon_upload, self.show_dialog
+        )
+        self.btn_create = self.big_buttons("Generar Archivo", icon_xml, self.create_xml)
         self.layout_init.addWidget(self.btn_init)
         self.layout_init.addWidget(self.btn_open)
         self.layout_init.addWidget(self.btn_create)
         # self.layout_init.addWidget(self.panel_init)
-        self.panel_init.setStyleSheet("background-color: #202029")
+        self.panel_init.setStyleSheet("background-color: #171821")
 
         self.layout_right.addWidget(self.panel_up)
         self.layout_right.addWidget(self.panel_init)
-        self.panel_right.setStyleSheet("background-color: #202029;")
+        self.panel_right.setStyleSheet("background-color: #171821;")
         self.panel_right.setFixedHeight(320)
 
     def print_input(self):
@@ -117,17 +134,27 @@ class WindowP(QWidget):
         else:
             error_msgbox("error", "Ingrese Datos para poder Ingresarlos")
 
+    def change_view_init(self):
+        self.stack.setCurrentIndex(0)
+        self.reset_button_colors()
+        self.btn_generate.setStyleSheet(self.sidebar_active)
+
     def change_view_dron(self):
         self.stack.setCurrentIndex(1)
+        self.reset_button_colors()
+        self.btn_view_d.setStyleSheet(self.sidebar_active)
         self.data_dron()
 
     def change_view_m(self):
         self.stack.setCurrentIndex(2)
+        self.reset_button_colors()
+        self.btn_messages.setStyleSheet(self.sidebar_active)
         self.data_messages()
 
     def change_view_help(self):
         self.stack.setCurrentIndex(3)
-        # self.data_messages()
+        self.reset_button_colors()
+        self.btn_help.setStyleSheet(self.sidebar_active)
 
     def p_dron(self):
         self.panel_2 = QWidget(self)
@@ -136,7 +163,7 @@ class WindowP(QWidget):
         self.panel_add = QWidget(self.panel_2)
         self.layout_add = QHBoxLayout(self.panel_add)
         self.text_add = QLineEdit()
-        self.text_add.setPlaceholderText("Escriba el nombre del Dron")
+        self.text_add.setPlaceholderText("Escriba el nombre del nuevo Dron")
         self.text_add.setStyleSheet(
             """
     QLineEdit {
@@ -144,8 +171,8 @@ class WindowP(QWidget):
         border-radius: 4px;
         color:white;
         padding: 6px 8px;
-        background: #332F40;
-        selection-background-color: #3D384D;
+        background: #252633;
+        selection-background-color: #595C7A;
     }
 """
         )
@@ -383,25 +410,41 @@ class WindowP(QWidget):
             current = current.next_node
             current_inst = current_inst.next_node
 
+    def reset_button_colors(self):
+        style = """
+            QPushButton {
+                background-color: #13151b;
+                color: #696a78;
+                border: 0px;
+                border-radius: 4px;
+                padding:12px 0 12px 15px;
+                text-align: left;
+            }
+            QPushButton:hover {
+                background-color: #1B1E26;
+                color: #dcdcde;
+            }
+        """
+        self.btn_generate.setStyleSheet(style)
+        self.btn_view_d.setStyleSheet(style)
+        self.btn_messages.setStyleSheet(style)
+        self.btn_help.setStyleSheet(style)
+
     def custom_button(self, texto, funcion=None):
         boton = QPushButton(texto)
         boton.setStyleSheet(
             """
             QPushButton {
-                background-color: #282833;
-                color: #9d9da0;
+                background-color: #13151b;
+                color: #696a78;
                 border: 0px;
                 border-radius: 4px;
-                padding:10px 0 8px 15px;
+                padding:12px 0 12px 15px;
                 text-align: left;
             }
             QPushButton:hover {
-                background-color: #323240;
+                background-color: #1B1E26;
                 color: #dcdcde;
-            }
-            QPushButton:pressed {
-                background-color: #3C3C4D;
-                color: #ffffff;
             }
         """
         )
@@ -413,19 +456,19 @@ class WindowP(QWidget):
         boton.setStyleSheet(
             """
             QPushButton {
-                background-color: #73bcf6;
-                color: #2a3343;
+                background-color: #a6f1c8;
+                color: #000002;
                 border: 0px;
                 font-weight:500;
                 border-radius: 5px;
                 text-align: center;
             }
             QPushButton:hover {
-                background-color: #67A7DB;
+                background-color: #9BE1BB;
                 color: #2a3343;
             }
             QPushButton:pressed {
-                background-color: #5B94C2;
+                background-color: #89C7A5;
                 color: #202733;
             }
         """
@@ -433,23 +476,28 @@ class WindowP(QWidget):
         boton.clicked.connect(funcion)
         return boton
 
-    def big_buttons(self, texto, funcion=None):
-        btn = QPushButton(texto)
+    def big_buttons(self, texto, icon, funcion=None):
+        btn = QToolButton()
+        btn.setText(texto)
         btn.setFixedSize(QtCore.QSize(220, 220))
+        btn.setIcon(icon)
+        btn.setIconSize(QtCore.QSize(135, 135))
+        btn.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         btn.setStyleSheet(
             """
-            QPushButton {
-                background-color: #2F3340;
-                color: #9EACD9;
+            QToolButton {
+                background-color: #2B2C3B;
+                color: #636587;
                 border: 0px;
-                border-radius: 4px;
+                font-weight:600;
+                border-radius: 6px;
             }
-            QPushButton:hover {
-                background-color: #383D4D;
-                color: #A8B6E6;
+            QToolButton:hover {
+                background-color: #303242;
+                color: #9195C7;
             }
-            QPushButton:pressed {
-                background-color: #414759;
+            QToolButton:pressed {
+                background-color: #343547;
                 color: #ffffff;
             }
         """
