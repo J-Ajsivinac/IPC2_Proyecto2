@@ -22,6 +22,7 @@ from modules.writeFile import Write
 from Tdas.linkedListD import LinkedListDrone
 from components.customMessage import *
 from modules.graph import Graph
+import webbrowser
 
 
 class WindowP(QWidget):
@@ -271,7 +272,9 @@ class WindowP(QWidget):
 """
         )
         btn_data = QPushButton("Ver Información")
+        btn_data.clicked.connect(self.view_information)
         btn_graph = QPushButton("Gráficar")
+        btn_graph.clicked.connect(self.graph_instructions)
         layout_data.addWidget(self.combo)
         layout_data.addWidget(btn_data)
         layout_data.addWidget(btn_graph)
@@ -323,6 +326,15 @@ class WindowP(QWidget):
 
         layout_data.addWidget(label_title)
         layout_data.addWidget(panel_prin)
+
+        panel_btn1 = QWidget(panel_data)
+        layout_btn1 = QVBoxLayout(panel_btn1)
+        label_text1 = QLabel("Ayuda")
+        btn_doc = QPushButton("Ver Documentación")
+        btn_doc.clicked.connect(self.view_doc)
+        layout_btn1.addWidget(label_text1)
+        layout_btn1.addWidget(btn_doc)
+        layout_data.addWidget(panel_btn1)
 
         layout_prin.addWidget(panel_info)
 
@@ -471,5 +483,31 @@ class WindowP(QWidget):
 
     def graph_system(self):
         gr = Graph("grafica_sistemas")
-        # self.s_list.print_temp()
         gr.create_sistem(self.s_list)
+
+    def view_information(self):
+        text = self.combo.currentText()
+        found = self.processed.s_search_b_hight(text)
+        information_msgbox(
+            "Información",
+            found.max_columns,
+            found.name_system,
+            f"{found.value.rows.first.value.size}",
+        )
+        # print(
+        #     "Información",
+        #     found.max_columns,
+        #     found.name_system,
+        #     found.value.rows.first.value.size,
+        # )
+
+    def graph_instructions(self):
+        text = self.combo.currentText()
+        found = self.processed.s_search_b_hight(text)
+        gr = Graph(f"grafica_{found.i_d}")
+        gr.create_message(found)
+
+    def view_doc(self):
+        webbrowser.open(
+            "https://github.com/J-Ajsivinac/IPC2_Proyecto2_202200135/tree/main/Doc"
+        )

@@ -62,7 +62,7 @@ class DoublyLinkedListSistem:
 
         left = self.first
         right = self.end
-
+        # print(f"double:{left.i_d}--{right.i_d}")
         while left is not None and right is not None and left != right:
             mid = left
             while mid.next_node != right:

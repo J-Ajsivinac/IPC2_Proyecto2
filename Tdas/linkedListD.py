@@ -42,41 +42,40 @@ class LinkedListDrone:
             self.end = new_data
             new_data.next_node = None
         elif self.first.i_d > i_d:
-            temp = self.first
             new_data.next_node = self.first
             self.first = new_data
-            if not new_data.next_node:
-                self.end = temp
         else:
             current = self.first
             while current.next_node and current.next_node.i_d < i_d:
                 current = current.next_node
             new_data.next_node = current.next_node
             current.next_node = new_data
+
+            # Actualizar el nodo final si el nuevo nodo se inserta al final
+            if current == self.end:
+                self.end = new_data
         self.size += 1
 
     def insert_sorted_msg(self, i_d, value, name_system, max_c):
-        if self.verify_dup(i_d):
-            error_msgbox("Error", f"El nombre {i_d} ya está registrado")
-            return
-
         new_data = NodeMessage(i_d, value, name_system, max_c)
         if self.is_empty():
             self.first = new_data
             self.end = new_data
             new_data.next_node = None
         elif self.first.i_d > i_d:
-            temp = self.first
             new_data.next_node = self.first
             self.first = new_data
-            if not new_data.next_node:
-                self.end = temp
         else:
             current = self.first
             while current.next_node and current.next_node.i_d < i_d:
                 current = current.next_node
             new_data.next_node = current.next_node
             current.next_node = new_data
+
+            # Actualizar el nodo final si el nuevo nodo se inserta al final
+            if current == self.end:
+                self.end = new_data
+
         self.size += 1
 
     def verify_dup(self, name):
@@ -103,12 +102,11 @@ class LinkedListDrone:
 
         left = self.first
         right = self.end
-
-        while left is not None and right is not None and left != right:
+        # print(name, left.i_d, right.i_d)
+        while left is not None and right is not None and left.i_d != right.i_d:
             mid = left
             while mid.next_node != right:
                 mid = mid.next_node
-
             if left.i_d == name:
                 return left
             if right.i_d == name:
@@ -120,7 +118,10 @@ class LinkedListDrone:
                 right = mid
             else:
                 left = mid.next_node
-
+        # if left and left.i_d == name:
+        #     return left
+        # if right and right.i_d == name:
+        #     return right
         return None
 
     def print_drone(self):
@@ -153,7 +154,7 @@ class LinkedListDrone:
             matrix = MainSistem(columns=current.max_columns)
             validate = list_sistem.verify_dup(current.name_system)
             current_dron = validate.value.rows.first
-
+            # print(current.max_columns)
             for _ in range(matrix.col_limit):
                 temp = LinkedListDrone()
                 matrix.create_matrix_instr(current_dron.i_d, temp)
