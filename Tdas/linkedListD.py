@@ -167,3 +167,8 @@ class LinkedList:
                 current.i_d, matrix, message, current.name_system
             )
             current = copy.deepcopy(current.next_node)
+
+    def empty_list(self):
+        self.first = None
+        self.end = None
+        self.size = 0

@@ -167,3 +167,8 @@ class DoublyLinkedListSistem:
             current_instructions = current_instructions.next_node
 
         return message
+
+    def empty_list(self):
+        self.first = None
+        self.end = None
+        self.size = 0

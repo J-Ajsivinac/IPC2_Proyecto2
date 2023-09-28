@@ -48,7 +48,7 @@ class WindowP(QWidget):
 
     def initUI(self):
         self.setWindowTitle("Proyecto 2")
-        self.setStyleSheet(f"background-color: #171821;")
+        self.setStyleSheet("background-color: #171821;")
         self.layout_p = QVBoxLayout(self)
         self.layout_p.setContentsMargins(0, 0, 0, 0)
         self.splitter = QSplitter(self)
@@ -109,7 +109,7 @@ class WindowP(QWidget):
         icon_init = QtGui.QIcon(Icons.BTN_RESET)
         icon_upload = QtGui.QIcon(Icons.BTN_UPL)
         icon_xml = QtGui.QIcon(Icons.BTN_XML)
-        self.btn_init = self.big_buttons("Inicializari Sistema", icon_init)
+        self.btn_init = self.big_buttons("Inicializari Sistema", icon_init, self.reset)
 
         self.btn_open = self.big_buttons(
             "Cargar Archivo", icon_upload, self.show_dialog
@@ -524,6 +524,13 @@ class WindowP(QWidget):
             read.load_data(self.drone_list, self.s_list, self.m_list)
             self.m_list.call_optimize(self.s_list, self.processed)
             # self.processed.print_temp()
+
+    def reset(self):
+        self.drone_list.empty_list()
+        self.s_list.empty_list()
+        self.m_list.empty_list()
+        self.inst_list.empty_list()
+        self.processed.empty_list()
 
     def create_xml(self):
         w = Write("salida.xml")
