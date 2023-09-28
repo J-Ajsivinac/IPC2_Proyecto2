@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-from Tdas.linkedListD import LinkedListDrone
+from Tdas.linkedListD import LinkedList
 from Tdas.doublyLinkedList import DoublyLinkedListSistem
 from Tdas.mainS import MainSistem
 from components.customMessage import *
@@ -11,8 +11,8 @@ class Read:
         self.root = self.tree.getroot()
 
     def load_data(self, list_dron, list_sistem, list_messages):
-        self.list_dron: LinkedListDrone = list_dron
-        self.list_sistem: LinkedListDrone = list_sistem
+        self.list_dron: LinkedList = list_dron
+        self.list_sistem: LinkedList = list_sistem
         self.load_drones(list_dron)
         self.load_list_drone(list_sistem)
         self.load_list_mes(list_messages)
@@ -20,12 +20,12 @@ class Read:
         # list_sistem.print_temp()
         # list_messages.print_temp1()
 
-    def load_drones(self, list_ori: LinkedListDrone):
+    def load_drones(self, list_ori: LinkedList):
         for list_d in self.root.findall("listaDrones"):
             for dron in list_d.findall("dron"):
                 list_ori.insert_sorted(dron.text)
 
-    def load_list_drone(self, list_ori: LinkedListDrone):
+    def load_list_drone(self, list_ori: LinkedList):
         for list_ in self.root.findall("listaSistemasDrones"):
             for sistem_l in list_.findall("sistemaDrones"):
                 system_name = sistem_l.get("nombre")
@@ -35,7 +35,7 @@ class Read:
 
                 for content in sistem_l.findall("contenido"):
                     dron = content.findtext("dron")
-                    temp = LinkedListDrone()
+                    temp = LinkedList()
                     if not self.list_dron.verify_dup(dron):
                         error_msgbox(
                             "Error",
@@ -53,7 +53,7 @@ class Read:
                 list_ori.insert_sorted(system_name, matrix)
                 # print(matrix.rows, system_name)
 
-    def load_list_mes(self, list_ori: LinkedListDrone):
+    def load_list_mes(self, list_ori: LinkedList):
         for m_list in self.root.findall("listaMensajes"):
             for message in m_list.findall("Mensaje"):
                 message_name = message.get("nombre")

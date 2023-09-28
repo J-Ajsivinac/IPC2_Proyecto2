@@ -21,7 +21,7 @@ from PySide6.QtCore import Qt
 import sys
 from modules.readFiles import Read
 from modules.writeFile import Write
-from Tdas.linkedListD import LinkedListDrone
+from Tdas.linkedListD import LinkedList
 from components.customMessage import *
 from modules.graph import Graph
 import webbrowser
@@ -31,11 +31,11 @@ from icons.iconos import Icons
 class WindowP(QWidget):
     def __init__(self):
         super().__init__()
-        self.drone_list = LinkedListDrone()
-        self.s_list = LinkedListDrone()
-        self.m_list = LinkedListDrone()
-        self.inst_list = LinkedListDrone()
-        self.processed = LinkedListDrone()
+        self.drone_list = LinkedList()
+        self.s_list = LinkedList()
+        self.m_list = LinkedList()
+        self.inst_list = LinkedList()
+        self.processed = LinkedList()
         self.sidebar_active = """ QPushButton {
                 background-color: #242833;
                 color: #b1b8fa;

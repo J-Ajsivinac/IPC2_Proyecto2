@@ -1,5 +1,5 @@
 import graphviz
-from Tdas.linkedListD import LinkedListDrone
+from Tdas.linkedListD import LinkedList
 
 
 class Graph:
@@ -12,7 +12,7 @@ class Graph:
             node_attr={"fontname": "Verdana"},
         )
 
-    def create_sistem(self, list_sys: LinkedListDrone):
+    def create_sistem(self, list_sys: LinkedList):
         current = list_sys.first
         i = 0
         while current:

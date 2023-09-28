@@ -5,7 +5,7 @@ from Tdas.mainS import MainSistem
 import copy
 
 
-class LinkedListDrone:
+class LinkedList:
     def __init__(self):
         self.first = None
         self.end = None
@@ -156,7 +156,7 @@ class LinkedListDrone:
             current_dron = validate.value.rows.first
             # print(current.max_columns)
             for _ in range(matrix.col_limit):
-                temp = LinkedListDrone()
+                temp = LinkedList()
                 matrix.create_matrix_instr(current_dron.i_d, temp)
                 current_dron = current_dron.next_node
 

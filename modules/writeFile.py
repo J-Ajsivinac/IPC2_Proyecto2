@@ -1,13 +1,13 @@
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
-from Tdas.linkedListD import LinkedListDrone
+from Tdas.linkedListD import LinkedList
 
 
 class Write:
     def __init__(self, route):
         self.route = route
 
-    def write_document(self, data: LinkedListDrone):
+    def write_document(self, data: LinkedList):
         respuesta = ET.Element("respuesta")
         listadoMensajes = ET.SubElement(respuesta, "listaMensajes")
         current = data.first
