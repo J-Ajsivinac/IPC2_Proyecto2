@@ -386,8 +386,11 @@ class WindowP(QWidget):
     def data_messages(self):
         current = self.processed.first
         current_inst = self.m_list.first
+        # print(self.processed.size)
+        # print(self.m_list.size)
         i = 0
         self.table_messages.setRowCount(0)
+        self.combo.clear()
         while current:
             self.table_messages.insertRow(self.table_messages.rowCount())
             self.table_messages.setRowHeight(i, 80)
@@ -537,10 +540,16 @@ class WindowP(QWidget):
         w.write_document(self.processed)
 
     def graph_system(self):
+        if self.s_list.size == 0:
+            alert_msgbox("Advertencia", "No hay datos Cargados")
+            return
         gr = Graph("grafica_sistemas")
         gr.create_sistem(self.s_list)
 
     def view_information(self):
+        if self.processed.size == 0:
+            alert_msgbox("Advertencia", "No hay datos Cargados")
+            return
         text = self.combo.currentText()
         found = self.processed.s_search_b_hight(text)
         information_msgbox(
@@ -549,14 +558,11 @@ class WindowP(QWidget):
             found.name_system,
             f"{found.value.rows.first.value.size}",
         )
-        # print(
-        #     "Información",
-        #     found.max_columns,
-        #     found.name_system,
-        #     found.value.rows.first.value.size,
-        # )
 
     def graph_instructions(self):
+        if self.processed.size == 0:
+            alert_msgbox("Advertencia", "No hay datos Cargados")
+            return
         text = self.combo.currentText()
         found = self.processed.s_search_b_hight(text)
         gr = Graph(f"grafica_{found.i_d}")

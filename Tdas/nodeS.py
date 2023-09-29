@@ -5,3 +5,6 @@ class NodeSistem:
         self.h_inst = h_inst
         self.last_node = None
         self.next_node = None
+        # Apuntadores para la lista temporal
+        self.next = None
+        self.prev = None

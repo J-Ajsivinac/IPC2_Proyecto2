@@ -68,9 +68,6 @@ class Graph:
     def create_message(self, data):
         with self.dot.subgraph(name="cluster_1") as cl:
             cl.attr(
-                label=f"Mensaje: {data.i_d}",
-                labelloc="t",
-                labeljust="c",
                 bgcolor="#eff6ff",
                 color="#bedbfe",
                 style="rounded",
@@ -91,7 +88,7 @@ class Graph:
                     columns = temp.value.first
                     if m == 0:
                         if x == 0:
-                            table_html += '<TD BGCOLOR="#2c2c2c"><FONT COLOR="white">Altura (m)</FONT></TD>'
+                            table_html += '<TD BGCOLOR="#2c2c2c"><FONT COLOR="white">Tiempo (s)</FONT></TD>'
                         else:
                             table_html += f'<TD BGCOLOR="#2c2c2c"><FONT COLOR="white">{temp.i_d}</FONT></TD>'
                             temp = temp.next_node

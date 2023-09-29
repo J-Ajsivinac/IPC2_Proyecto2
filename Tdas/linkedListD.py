@@ -46,7 +46,7 @@ class LinkedList:
             self.first = new_data
         else:
             current = self.first
-            while current.next_node and current.next_node.i_d < i_d:
+            while current.next_node and current.i_d < i_d:
                 current = current.next_node
             new_data.next_node = current.next_node
             current.next_node = new_data
@@ -118,10 +118,10 @@ class LinkedList:
                 right = mid
             else:
                 left = mid.next_node
-        # if left and left.i_d == name:
-        #     return left
-        # if right and right.i_d == name:
-        #     return right
+        if left and left.i_d == name:
+            return left
+        if right and right.i_d == name:
+            return right
         return None
 
     def print_drone(self):
@@ -144,12 +144,14 @@ class LinkedList:
             current = current.next_node
 
     def call_optimize(self, list_sistem, list_proc):
+        current_o = self.first
         current = copy.deepcopy(self.first)
         temp = None
 
         while current:
             if current.processed:
                 current = current.next_node
+                curren_o = current_o.next_node
                 continue
             matrix = MainSistem(columns=current.max_columns)
             validate = list_sistem.verify_dup(current.name_system)
@@ -160,13 +162,16 @@ class LinkedList:
                 matrix.create_matrix_instr(current_dron.i_d, temp)
                 current_dron = current_dron.next_node
 
+            # print(validate.value)
             message = current.value.decode(validate.value)
-            count = current.value.optimize(matrix)
+            _ = current.value.optimize(matrix)
             current.processed = True
+            current_o.processed = True
             list_proc.insert_sorted_msg(
                 current.i_d, matrix, message, current.name_system
             )
             current = copy.deepcopy(current.next_node)
+            current_o = current_o.next_node
 
     def empty_list(self):
         self.first = None

@@ -40,78 +40,43 @@ class MainSistem:
         left = self.rows.first
         right = self.rows.end
         p_drone = list_temp.first.i_d
-        # print(current_dron.i_d)
+
         while left and right:
             if left.i_d > right.i_d:
                 break
 
             if left.i_d == right.i_d:
-                # print(f"--{left.i_d},{right.value}")
-                search = list_temp.search_binary_dup(right.i_d)
-                # print("value", search.value)
-                if not search:
-                    left.value.insert(number, "Esperar")
-                elif search.value > 0:
-                    # print("Subir", right.i_d)
-                    left.value.insert(number, "Subir")
-                    search.value -= 1
-                elif search.value < 0:
-                    # print("Bajar", right.i_d)
-                    left.value.insert(number, "Bajar")
-                    search.value += 1
-                elif search.value == 0:
-                    if search.i_d == p_drone:
-                        # print("Encender", right.i_d)
-                        left.value.insert(number, "Encender")
-                        # search.value -= 1
-                    else:
-                        # print("Esperar", right.i_d)
-                        left.value.insert(number, "Esperar")
+                search = list_temp.search_binary_next(right.i_d)
+                self.actions(search, right, number, p_drone)
                 break
 
             if left:
-                search = list_temp.search_binary_dup(left.i_d)
-
-                if not search:
-                    left.value.insert(number, "Esperar")
-
-                elif search.value > 0:
-                    # print("Subir", left.i_d)
-                    left.value.insert(number, "Subir")
-                    search.value -= 1
-                elif search.value < 0:
-                    # print("Bajar", left.i_d)
-                    left.value.insert(number, "Bajar")
-                    search.value += 1
-                elif search.value == 0:
-                    if search.i_d == p_drone:
-                        # print("Encender", left.i_d)
-                        left.value.insert(number, "Encender")
-                        # search.value -= 1
-                    else:
-                        # print("Esperar", left.i_d)
-                        left.value.insert(number, "Esperar")
+                search = list_temp.search_binary_next(left.i_d)
+                self.actions(search, left, number, p_drone)
 
             if right:
-                search = list_temp.search_binary_dup(right.i_d)
-                if not search:
-                    right.value.insert(number, "Esperar")
-                elif search.value > 0:
-                    # print("Subir", right.i_d)
-                    right.value.insert(number, "Subir")
-                    search.value -= 1
-                elif search.value < 0:
-                    # print("Bajar", right.i_d)
-                    right.value.insert(number, "Bajar")
-                    search.value += 1
-                elif search.value == 0:
-                    if search.i_d == p_drone:
-                        # print("Encender", right.i_d)
-                        right.value.insert(number, "Encender")
-                        search.value -= 1
-                    else:
-                        # print("Esperar", right.i_d)
-                        right.value.insert(number, "Esperar")
+                search = list_temp.search_binary_next(right.i_d)
+                self.actions(search, right, number, p_drone)
 
             left = left.next_node
             right = right.last_node
+
+    def actions(self, search, data, number, p_drone):
+        # search = list_temp.search_binary_dup(data.i_d)
+        if not search:
+            data.value.insert(number, "Esperar")
+        elif search.value > 0:
+            data.value.insert(number, "Subir")
+            search.value -= 1
+        elif search.value < 0:
+            data.value.insert(number, "Bajar")
+            search.value += 1
+        elif search.value == 0:
+            if search.i_d == p_drone:
+                data.value.insert(number, "Emitir Luz")
+            else:
+                data.value.insert(number, "Esperar")
+
+    def verify_dup(self, value):
+        restult = self.rows.search_binary_dup(value)
+        return restult

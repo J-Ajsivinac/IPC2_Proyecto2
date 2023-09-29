@@ -32,8 +32,10 @@ class Read:
                 h_limit = sistem_l.findtext("alturaMaxima")
                 d_limit = sistem_l.findtext("cantidadDrones")
                 matrix = MainSistem(int(d_limit), int(h_limit))
-
+                error = False
                 for content in sistem_l.findall("contenido"):
+                    if error:
+                        continue
                     dron = content.findtext("dron")
                     temp = LinkedList()
                     if not self.list_dron.verify_dup(dron):
@@ -41,6 +43,14 @@ class Read:
                             "Error",
                             f"El dron {dron} no esta en la lista de drones\nNo se agregará el sistema",
                         )
+                        error = True
+                        continue
+                    if matrix.verify_dup(dron):
+                        error_msgbox(
+                            "Error",
+                            f"El dron {dron} ya esta el sistema {system_name}\nNo se puede tener 2 drones iguales",
+                        )
+                        error = True
                         continue
                     for Hight in content.findall("alturas"):
                         for h in Hight.findall("altura"):
@@ -48,14 +58,18 @@ class Read:
                             if int(h.get("valor")) <= int(h_limit):
                                 if value is None:
                                     value = " "
-                                temp.insert_sorted(h.get("valor"), value)
+                                temp.insert_sorted(int(h.get("valor")), value)
+                                # print(h.get("valor"), value)
                     matrix.create_matrix(dron, temp)
-                list_ori.insert_sorted(system_name, matrix)
+                if not error:
+                    list_ori.insert_sorted(system_name, matrix)
                 # print(matrix.rows, system_name)
+            # print()
 
     def load_list_mes(self, list_ori: LinkedList):
         for m_list in self.root.findall("listaMensajes"):
             for message in m_list.findall("Mensaje"):
+                error = False
                 message_name = message.get("nombre")
                 system_name = message.findtext("sistemaDrones")
                 list_ins = DoublyLinkedListSistem()
@@ -70,8 +84,17 @@ class Read:
                     continue
                 max_c = validate.value.col_limit
 
+                if list_ori.verify_dup(message_name):
+                    error_msgbox(
+                        "Error",
+                        f"El nombre de mensaje: {system_name} ya está registrado",
+                    )
+                    continue
+
                 for instructions in message.findall("instrucciones"):
                     for i in instructions.findall("instruccion"):
+                        if error:
+                            continue
                         value = int(i.text)
                         dup = list_ins.search_from_end(i.get("dron"))
                         # dup = list_ins.search_from_end(i.get("dron"))
@@ -81,6 +104,7 @@ class Read:
                                 "Error",
                                 f"El dron {i.get('dron')} no esta en la lista de drones\nNo se agregará el sistema",
                             )
+                            error = True
                             continue
 
                         if int(i.text) > max_c:
@@ -94,6 +118,7 @@ class Read:
                             value -= dup.h_inst
 
                         list_ins.insert(i.get("dron"), value, int(i.text))
-                list_ori.insert_sorted_msg(
-                    message_name, list_ins, system_name, validate.value.row_limit
-                )
+                if not error:
+                    list_ori.insert_sorted_msg(
+                        message_name, list_ins, system_name, validate.value.row_limit
+                    )
