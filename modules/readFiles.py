@@ -17,8 +17,8 @@ class Read:
         self.load_list_drone(list_sistem)
         self.load_list_mes(list_messages)
         # list_dron.print_drone()
-        # list_sistem.print_temp()
-        list_messages.print_temp1()
+        list_sistem.print_temp()
+        # list_messages.print_temp1()
 
     def load_drones(self, list_ori: LinkedList):
         for list_d in self.root.findall("listaDrones"):
@@ -31,6 +31,16 @@ class Read:
                 system_name = sistem_l.get("nombre")
                 h_limit = sistem_l.findtext("alturaMaxima")
                 d_limit = sistem_l.findtext("cantidadDrones")
+                if int(h_limit) > 100:
+                    alert_msgbox(
+                        "Advertencia",
+                        "El limite de alturas permitido es 100\nSe cambia las alturas a 100",
+                    )
+                if int(d_limit) > 200:
+                    alert_msgbox(
+                        "Advertencia",
+                        "El limite de drones permitido es 200\nSe cambia el No. Drones a 200",
+                    )
                 matrix = MainSistem(int(d_limit), int(h_limit))
                 error = False
                 update = False
@@ -40,9 +50,14 @@ class Read:
 
                     dron = content.findtext("dron")
                     temp = LinkedList()
-                    temp_list = list_ori.verify_dup(system_name)
+                    temp_list = self.list_sistem.verify_dup(system_name)
                     if temp_list:
                         matrix = temp_list.value
+                        print(matrix.rows.size, matrix.row_limit, "---")
+                        if matrix.rows.size > matrix.row_limit - 1:
+                            error = True
+                            print(matrix.rows.size, matrix.row_limit)
+                            break
                         if (
                             int(d_limit) < matrix.row_limit
                             or int(h_limit) < matrix.col_limit
@@ -51,10 +66,12 @@ class Read:
                                 "Error",
                                 "No se puede tener un limite inferior al ya ingresado",
                             )
-                        update = True
+
                         # temp = matrix.rows
                         t = matrix.verify_dup(dron)
-                        temp = t.value
+                        if t:
+                            temp = t.value
+                            update = True
                     if not self.list_dron.verify_dup(dron):
                         error_msgbox(
                             "Error",
@@ -65,12 +82,21 @@ class Read:
                     for Hight in content.findall("alturas"):
                         for h in Hight.findall("altura"):
                             value = h.text
+
                             if int(h.get("valor")) <= int(h_limit):
                                 if value is None:
                                     value = " "
-                                if not temp.verify_replace(int(h.get("valor")), value):
+                                if temp.verify_replace(int(h.get("valor")), value):
+                                    update = True
+                                else:
                                     temp.insert_sorted(int(h.get("valor")), value)
+                                    update = False
                                 # print(h.get("valor"), value)
+                            else:
+                                error_msgbox(
+                                    "Error",
+                                    f"Altura: {h.get('valor')}\nMayor al limite del sistema: {system_name}",
+                                )
                     if not update:
                         matrix.create_matrix(dron, temp)
                 if not error and not update:
@@ -115,9 +141,19 @@ class Read:
                         if not self.list_dron.verify_dup(i.get("dron")):
                             error_msgbox(
                                 "Error",
-                                f"El dron {i.get('dron')} no esta en la lista de drones\nNo se agregará el sistema",
+                                f"El dron {i.get('dron')} no esta en la lista de drones",
                             )
-                            error = True
+                            # error = True
+                            continue
+
+                        if not self.list_sistem.verfy_dron_m(
+                            system_name, i.get("dron")
+                        ):
+                            error_msgbox(
+                                "Error",
+                                f"El dron {i.get('dron')} no esta en el sistema de drones {system_name}",
+                            )
+                            # error = True
                             continue
 
                         if int(i.text) > max_c:

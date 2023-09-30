@@ -41,18 +41,19 @@ class LinkedList:
             self.first = new_data
             self.end = new_data
             new_data.next_node = None
-        elif self.first.i_d > i_d:
+        elif self.first.i_d >= i_d:
             new_data.next_node = self.first
             self.first = new_data
+
         else:
             current = self.first
-            while current.next_node and current.i_d < i_d:
+            while current.next_node and current.next_node.i_d < i_d:
                 current = current.next_node
             new_data.next_node = current.next_node
             current.next_node = new_data
 
             # Actualizar el nodo final si el nuevo nodo se inserta al final
-            if current == self.end:
+            if not current.next_node:
                 self.end = new_data
         self.size += 1
 
@@ -200,18 +201,20 @@ class LinkedList:
         temp = None
 
         while current:
-            if current.processed:
+            if current.processed or current is None:
                 current = current.next_node
                 curren_o = current_o.next_node
                 continue
+
             matrix = MainSistem(columns=current.max_columns)
             validate = list_sistem.verify_dup(current.name_system)
             current_dron = validate.value.rows.first
             # print(current.max_columns)
             for _ in range(matrix.col_limit):
-                temp = LinkedList()
-                matrix.create_matrix_instr(current_dron.i_d, temp)
-                current_dron = current_dron.next_node
+                if current_dron:
+                    temp = LinkedList()
+                    matrix.create_matrix_instr(current_dron.i_d, temp)
+                    current_dron = current_dron.next_node
 
             # print(validate.value)
             message = current.value.decode(validate.value)
@@ -240,3 +243,13 @@ class LinkedList:
                     current.value = new_value
                 break
             current = current.next_node
+
+    def verfy_dron_m(self, name_s, dron):
+        current = self.first
+        while current:
+            if current.i_d == name_s:
+                rows = current.value.rows
+                result = rows.search_binary_dup(dron)
+                return result
+            current = current.next_node
+        return None

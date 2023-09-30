@@ -4,6 +4,7 @@ from Tdas.doublyLinkedList import DoublyLinkedListSistem
 class MainSistem:
     def __init__(self, rows=0, columns=0):
         self.rows = DoublyLinkedListSistem()
+
         self.row_limit = 100 if rows > 100 else rows
         self.col_limit = 200 if columns > 200 else columns
 

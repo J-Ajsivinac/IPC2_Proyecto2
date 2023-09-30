@@ -35,7 +35,7 @@ class Graph:
                     table_html += "<TR>"
                     for x in range(current.value.row_limit + 1):
                         if temp is None:
-                            break
+                            continue
                         columns = temp.value.first
                         if m == 0:
                             if x == 0:
@@ -81,10 +81,11 @@ class Graph:
             # print(data.value.row_limit)
             for m in range(times + 1):
                 temp = data.value.rows.first
-                table_html += "<TR>"
+                if temp is not None:
+                    table_html += "<TR>"
                 for x in range(data.value.col_limit + 1):
                     if temp is None:
-                        break
+                        continue
                     columns = temp.value.first
                     if m == 0:
                         if x == 0:
