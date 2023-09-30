@@ -17,7 +17,7 @@ class Read:
         self.load_list_drone(list_sistem)
         self.load_list_mes(list_messages)
         # list_dron.print_drone()
-        list_sistem.print_temp()
+        # list_sistem.print_temp()
         # list_messages.print_temp1()
 
     def load_drones(self, list_ori: LinkedList):

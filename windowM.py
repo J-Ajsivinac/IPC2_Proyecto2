@@ -26,6 +26,7 @@ from components.customMessage import *
 from modules.graph import Graph
 import webbrowser
 from icons.iconos import Icons
+from components.styles import Styles
 
 
 class WindowP(QWidget):
@@ -109,7 +110,7 @@ class WindowP(QWidget):
         icon_init = QtGui.QIcon(Icons.BTN_RESET)
         icon_upload = QtGui.QIcon(Icons.BTN_UPL)
         icon_xml = QtGui.QIcon(Icons.BTN_XML)
-        self.btn_init = self.big_buttons("Inicializari Sistema", icon_init, self.reset)
+        self.btn_init = self.big_buttons("Inicializar Sistema", icon_init, self.reset)
 
         self.btn_open = self.big_buttons(
             "Cargar Archivo", icon_upload, self.show_dialog
@@ -208,27 +209,11 @@ class WindowP(QWidget):
         )
         self.header_vertical = self.table.verticalHeader()
         self.header_vertical.setStyleSheet(
-            "QHeaderView::section { background-color: #141519;color:#ffffff;border:0px }"
+            "QHeaderView::section { background-color: #171821;color:#ffffff;border:0px }"
         )
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Nombre"))
         self.header.setSectionResizeMode(QHeaderView.Stretch)
-        self.table.setStyleSheet(
-            """
-                QTableWidget {
-                    background-color: #2a2a36;
-                    gridline-color: #292a2f;
-                    border:0px;
-                    border-radius:10px;
-                }
-                QTableWidget::item {
-                    color: #ffffff;
-                }
-                QTableWidget::item:selected {
-                    background-color: #343442;
-                }
-                QTableCornerButton::section { background-color: #2a2a36 }
-            """
-        )
+        self.table.setStyleSheet(Styles.S_SCROLLBAR_TABLE)
 
         self.layout_table.addWidget(self.table)
 
@@ -236,7 +221,23 @@ class WindowP(QWidget):
         self.layout_system = QVBoxLayout(self.panel_system)
 
         self.lable_system = QLabel("Sistema de Drones")
+        self.lable_system.setStyleSheet("color:white")
         self.btn_graph_system = QPushButton("Graficar")
+        self.btn_graph_system.setStyleSheet(
+            """
+            QPushButton {
+                background-color: #468efc;
+                color: white;
+                border: 0px;
+                border-radius: 5px;
+                padding:8px 0 8px 0px;
+                font-weight:600;
+            }
+            QPushButton:hover {
+                background-color: #356BBD;
+                color: white;
+            }"""
+        )
         self.btn_graph_system.clicked.connect(self.graph_system)
         self.layout_system.addWidget(self.lable_system)
         self.layout_system.addWidget(self.btn_graph_system)
@@ -249,10 +250,11 @@ class WindowP(QWidget):
     def p_message(self):
         self.panel_3 = QWidget(self)
         self.layout_3 = QVBoxLayout(self.panel_3)
-        self.panel_3.setStyleSheet("background-color: #202029;")
+        self.panel_3.setStyleSheet("background-color: #171821;")
         panel_message = QWidget(self.panel_3)
         layout_message = QVBoxLayout(panel_message)
         label_mesages = QLabel("Listado de Mensajes")
+        label_mesages.setStyleSheet("color:white")
         self.table_messages = QTableWidget()
         self.table_messages.setColumnCount(2)
         self.table_messages.setHorizontalHeaderItem(0, QTableWidgetItem("Nombre"))
@@ -260,47 +262,71 @@ class WindowP(QWidget):
             1, QTableWidgetItem("Instrucciones")
         )
         header_messages = self.table_messages.horizontalHeader()
+        header_messages.setStyleSheet(
+            """
+            QHeaderView::section 
+            { 
+                background-color: #141519;
+                color:#ffffff;border:0px;
+                border-top-left-radius:10px;
+                border-top-right-radius:10px;
+            }"""
+        )
+        header_v = self.table_messages.verticalHeader()
+        header_v.setStyleSheet(
+            "QHeaderView::section { background-color: #171821;color:#ffffff;border:0px }"
+        )
         header_messages.setSectionResizeMode(QHeaderView.Stretch)
 
         layout_message.addWidget(label_mesages)
-        self.table_messages.setStyleSheet(
-            """
-                QTableWidget {
-                    background-color: #2a2a36;
-                    gridline-color: #292a2f;
-                    border:0px;
-                    border-radius:10px;
-                }
-                QTableWidget::item {
-                    color: #ffffff;
-                }
-                QTableWidget::item:selected {
-                    background-color: #343442;
-                }
-                QTableCornerButton::section { background-color: #2a2a36 }
-            """
-        )
+        self.table_messages.setStyleSheet(Styles.S_SCROLLBAR_TABLE)
         layout_message.addWidget(self.table_messages)
 
         panel_instructions = QWidget(self.panel_3)
         layout_instructions = QVBoxLayout(panel_instructions)
+
         label_instructins = QLabel("Instrucciones a Enviar")
+        label_instructins.setStyleSheet("color:white")
         layout_instructions.addWidget(label_instructins)
 
         panel_data = QWidget(panel_instructions)
         layout_data = QHBoxLayout(panel_data)
+        layout_data.setContentsMargins(0, 0, 0, 0)
         self.combo = QComboBox()
-        self.combo.setStyleSheet(
-            """
-    QComboBox {
-        background-color: #272727;
-        color: #ffffff;
-    }
-"""
-        )
+        self.combo.setStyleSheet(Styles.S_COMBOBOX)
         btn_data = QPushButton("Ver Información")
+        btn_data.setStyleSheet(
+            """
+            QPushButton {
+                background-color: #c3c4f4;
+                color: #2B2B36;
+                border: 0px;
+                border-radius: 5px;
+                padding:6px 0 6px 0px;
+                font-weight:600;
+            }
+            QPushButton:hover {
+                background-color: #AFB0DB;
+                color: #2B2B36;
+            }"""
+        )
         btn_data.clicked.connect(self.view_information)
         btn_graph = QPushButton("Gráficar")
+        btn_graph.setStyleSheet(
+            """
+            QPushButton {
+                background-color: #468efc;
+                color: white;
+                border: 0px;
+                border-radius: 5px;
+                padding:6px 0 6px 0px;
+                font-weight:600;
+            }
+            QPushButton:hover {
+                background-color: #356BBD;
+                color: white;
+            }"""
+        )
         btn_graph.clicked.connect(self.graph_instructions)
         layout_data.addWidget(self.combo)
         layout_data.addWidget(btn_data)
@@ -313,18 +339,23 @@ class WindowP(QWidget):
     def p_help(self):
         self.panel_4 = QWidget(self)
         self.layout_4 = QVBoxLayout(self.panel_4)
-        self.panel_4.setFixedHeight(200)
+
+        self.layout_4.setContentsMargins(20, 15, 20, 10)
+        self.panel_4.setFixedHeight(300)
         panel_data = QWidget(self.panel_4)
         layout_data = QVBoxLayout(panel_data)
-
+        panel_data.setStyleSheet("background-color:#21222d; border-radius:10px")
         label_title = QLabel("Datos del Estudiante")
+        label_title.setStyleSheet("color:white;font-weight:700")
         # panel_data.setFixedHeight(200)
 
         panel_prin = QWidget(panel_data)
         layout_prin = QVBoxLayout(panel_prin)
-        layout_prin.setContentsMargins(0, 0, 0, 0)
+        layout_prin.setContentsMargins(5, 5, 5, 5)
         label_img = QLabel("Joab Israel Ajsivinac Ajsivinac")
+        label_img.setStyleSheet("color:white")
         label_cl = QLabel('Introducción a la Programación y computación 2 sección "N"')
+        label_cl.setStyleSheet("color:white")
         layout_prin.addWidget(label_img)
 
         panel_info = QWidget(panel_prin)
@@ -333,21 +364,27 @@ class WindowP(QWidget):
         panel_data5 = QWidget(panel_info)
         layout_data5 = QVBoxLayout(panel_data5)
         label_t1 = QLabel("Carné")
+        label_t1.setStyleSheet("color:white")
         label_c = QLabel("202200135")
+        label_c.setStyleSheet("color:white")
         layout_data5.addWidget(label_t1)
         layout_data5.addWidget(label_c)
 
         panel_data1 = QWidget(panel_info)
         layout_data1 = QVBoxLayout(panel_data1)
         label_t2 = QLabel("Carrera")
+        label_t2.setStyleSheet("color:white")
         label_c2 = QLabel("Ingeniería en Ciencias y Sistemas")
+        label_c2.setStyleSheet("color:white")
         layout_data1.addWidget(label_t2)
         layout_data1.addWidget(label_c2)
 
         panel_data2 = QWidget(panel_info)
         layout_data2 = QVBoxLayout(panel_data2)
         label_t3 = QLabel("Semestre")
+        label_t3.setStyleSheet("color:white")
         label_c3 = QLabel("Cuarto")
+        label_c3.setStyleSheet("color:white")
         layout_data2.addWidget(label_t3)
         layout_data2.addWidget(label_c3)
 
@@ -356,10 +393,24 @@ class WindowP(QWidget):
 
         panel_btn1 = QWidget(panel_data)
         layout_btn1 = QVBoxLayout(panel_btn1)
-        label_text1 = QLabel("Ayuda")
         btn_doc = QPushButton("Ver Documentación")
+        btn_doc.setStyleSheet(
+            """
+            QPushButton {
+                background-color: #468efc;
+                color: white;
+                border: 0px;
+                border-radius: 5px;
+                padding:8px 0 8px 0px;
+                font-weight:600;
+            }
+            QPushButton:hover {
+                background-color: #356BBD;
+                color: white;
+            }"""
+        )
         btn_doc.clicked.connect(self.view_doc)
-        layout_btn1.addWidget(label_text1)
+        # layout_btn1.addWidget(label_text1)
         layout_btn1.addWidget(btn_doc)
         layout_data.addWidget(panel_btn1)
 
@@ -369,7 +420,7 @@ class WindowP(QWidget):
         layout_info.addWidget(panel_data1)
         layout_info.addWidget(panel_data2)
         layout_prin.addWidget(label_cl)
-        self.panel_4.setStyleSheet("background-color: #2a2a36;")
+        self.panel_4.setStyleSheet("background-color: #171821;")
         self.layout_4.addWidget(panel_data)
 
     def data_dron(self):
@@ -378,6 +429,7 @@ class WindowP(QWidget):
         self.table.setRowCount(0)
         while current:
             self.table.insertRow(self.table.rowCount())
+            self.table.setRowHeight(i, 40)
             item = QTableWidgetItem(f"{current.i_d}")
             self.table.setItem(i, 0, item)
             i += 1
@@ -393,7 +445,7 @@ class WindowP(QWidget):
         self.combo.clear()
         while current:
             self.table_messages.insertRow(self.table_messages.rowCount())
-            self.table_messages.setRowHeight(i, 80)
+            self.table_messages.setRowHeight(i, 85)
             for j in range(2):
                 item = None
                 if j == 0:
@@ -401,10 +453,51 @@ class WindowP(QWidget):
                     self.combo.addItem(f"{current.i_d}")
                 elif j == 1:
                     item = QTextEdit()
+                    item.setStyleSheet(
+                        """
+                        QTextEdit {
+                        background-color: #2a2a36;
+                        color: white;
+                        border: 0px;
+                        }
+                        QScrollBar:vertical {
+                            border: none;
+                            background-color:#343442;
+                            width: 10px;
+                            border-radius: 0px;
+                        }
+                        QScrollBar::handle:vertical {   
+                            background: #7d91db;
+                            min-height: 20px;
+                            border-radius: 4px;
+                        }
+                        
+                        QScrollBar::add-line:vertical {
+                            border: none;
+                            background: none;
+                        }
+                        QScrollBar::sub-line:vertical {
+                            border: none;
+                            background: none;
+                        }
+                        
+                        QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical
+                            {
+                                background: none;
+                            }
+
+                            QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical
+                            {
+                                background: none;
+                            }
+
+                        """
+                    )
                     current_v = current_inst.value.first
                     while current_v:
                         item.append(f"{current_v.i_d},{current_v.h_inst}")
                         current_v = current_v.next_node
+                    item.setReadOnly(True)
                     self.table_messages.setCellWidget(i, j, item)
                     continue
                 self.table_messages.setItem(i, j, item)
@@ -570,5 +663,5 @@ class WindowP(QWidget):
 
     def view_doc(self):
         webbrowser.open(
-            "https://github.com/J-Ajsivinac/IPC2_Proyecto2_202200135/tree/main/Doc"
+            "https://github.com/J-Ajsivinac/IPC2_Proyecto2_202200135/blob/main/Doc/Documentacion_202200135.pdf"
         )
