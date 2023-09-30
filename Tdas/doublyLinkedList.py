@@ -89,6 +89,16 @@ class DoublyLinkedListSistem:
             return right
         return None
 
+    def verify_replace(self, i_d, value, h):
+        current = self.first
+        while current:
+            if current.i_d == i_d:
+                current.value = value
+                current.h_inst = h
+                return True
+            current = current.next_node
+        return False
+
     def search_binary_next(self, name):
         if not self.first:
             return None

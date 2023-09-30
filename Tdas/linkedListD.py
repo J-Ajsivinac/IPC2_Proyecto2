@@ -96,6 +96,57 @@ class LinkedList:
 
         return current
 
+    def verify_replace(self, name, value):
+        current = self.first
+        prev = None
+
+        if self.size == 0:
+            return False
+
+        while current and current.i_d != name:
+            prev = current
+            current = current.next_node
+        temp = NodeDrone(name, value)
+        if not current:
+            return False
+        if prev is None:
+            self.first = temp
+            temp.next_node = current.next_node
+            current.next_node = None
+            return True
+
+        prev.next_node = temp
+        temp.next_node = current.next_node
+        current.next_node = None
+        return True
+
+    def verify_replace_msg(self, name, value, name_system, max_c):
+        current = self.first
+        prev = None
+
+        if self.size == 0:
+            return False
+
+        while current and current.i_d != name:
+            prev = current
+            current = current.next_node
+        temp = NodeMessage(name, value, name_system, max_c)
+        if not current:
+            return False
+        if prev is None:
+            self.first = temp
+            temp.next_node = current.next_node
+            current.next_node = None
+            return True
+
+        if current is self.end:
+            self.end = temp
+
+        prev.next_node = temp
+        temp.next_node = current.next_node
+        current.next_node = None
+        return True
+
     def s_search_b_hight(self, name):
         if not self.first:
             return None
@@ -105,7 +156,7 @@ class LinkedList:
         # print(name, left.i_d, right.i_d)
         while left is not None and right is not None and left.i_d != right.i_d:
             mid = left
-            while mid.next_node != right:
+            while mid.next_node.i_d != right.i_d:
                 mid = mid.next_node
             if left.i_d == name:
                 return left
@@ -167,9 +218,12 @@ class LinkedList:
             _ = current.value.optimize(matrix)
             current.processed = True
             current_o.processed = True
-            list_proc.insert_sorted_msg(
+            if not list_proc.verify_replace_msg(
                 current.i_d, matrix, message, current.name_system
-            )
+            ):
+                list_proc.insert_sorted_msg(
+                    current.i_d, matrix, message, current.name_system
+                )
             current = copy.deepcopy(current.next_node)
             current_o = current_o.next_node
 
@@ -177,3 +231,12 @@ class LinkedList:
         self.first = None
         self.end = None
         self.size = 0
+
+    def update_value(self, i_d, new_value):
+        current = self.first
+        while current:
+            if current.i_d == i_d:
+                if current.value != new_value:
+                    current.value = new_value
+                break
+            current = current.next_node

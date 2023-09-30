@@ -18,7 +18,7 @@ class Read:
         self.load_list_mes(list_messages)
         # list_dron.print_drone()
         # list_sistem.print_temp()
-        # list_messages.print_temp1()
+        list_messages.print_temp1()
 
     def load_drones(self, list_ori: LinkedList):
         for list_d in self.root.findall("listaDrones"):
@@ -33,22 +33,32 @@ class Read:
                 d_limit = sistem_l.findtext("cantidadDrones")
                 matrix = MainSistem(int(d_limit), int(h_limit))
                 error = False
+                update = False
                 for content in sistem_l.findall("contenido"):
                     if error:
                         continue
+
                     dron = content.findtext("dron")
                     temp = LinkedList()
+                    temp_list = list_ori.verify_dup(system_name)
+                    if temp_list:
+                        matrix = temp_list.value
+                        if (
+                            int(d_limit) < matrix.row_limit
+                            or int(h_limit) < matrix.col_limit
+                        ):
+                            error_msgbox(
+                                "Error",
+                                "No se puede tener un limite inferior al ya ingresado",
+                            )
+                        update = True
+                        # temp = matrix.rows
+                        t = matrix.verify_dup(dron)
+                        temp = t.value
                     if not self.list_dron.verify_dup(dron):
                         error_msgbox(
                             "Error",
                             f"El dron {dron} no esta en la lista de drones\nNo se agregará el sistema",
-                        )
-                        error = True
-                        continue
-                    if matrix.verify_dup(dron):
-                        error_msgbox(
-                            "Error",
-                            f"El dron {dron} ya esta el sistema {system_name}\nNo se puede tener 2 drones iguales",
                         )
                         error = True
                         continue
@@ -58,10 +68,12 @@ class Read:
                             if int(h.get("valor")) <= int(h_limit):
                                 if value is None:
                                     value = " "
-                                temp.insert_sorted(int(h.get("valor")), value)
+                                if not temp.verify_replace(int(h.get("valor")), value):
+                                    temp.insert_sorted(int(h.get("valor")), value)
                                 # print(h.get("valor"), value)
-                    matrix.create_matrix(dron, temp)
-                if not error:
+                    if not update:
+                        matrix.create_matrix(dron, temp)
+                if not error and not update:
                     list_ori.insert_sorted(system_name, matrix)
                 # print(matrix.rows, system_name)
             # print()
@@ -74,22 +86,23 @@ class Read:
                 system_name = message.findtext("sistemaDrones")
                 list_ins = DoublyLinkedListSistem()
                 validate = self.list_sistem.verify_dup(system_name)
-                # print(validate.value.col_limit)
+                upadate = False
                 max_c = None
                 if not validate:
                     error_msgbox(
                         "Error",
-                        f"El Systema {system_name} no está registrado\nNo se agregará el sistema",
+                        f"El Systema {system_name} no está registrado",
                     )
                     continue
                 max_c = validate.value.col_limit
 
-                if list_ori.verify_dup(message_name):
-                    error_msgbox(
-                        "Error",
-                        f"El nombre de mensaje: {system_name} ya está registrado",
-                    )
-                    continue
+                temp_list = list_ori.verify_dup(message_name)
+
+                if temp_list:
+                    list_ins = temp_list.value
+                    temp_list.processed = False
+                    upadate = True
+                    # continue
 
                 for instructions in message.findall("instrucciones"):
                     for i in instructions.findall("instruccion"):
@@ -116,9 +129,8 @@ class Read:
 
                         if dup:
                             value -= dup.h_inst
-
                         list_ins.insert(i.get("dron"), value, int(i.text))
-                if not error:
+                if not error and not upadate:
                     list_ori.insert_sorted_msg(
                         message_name, list_ins, system_name, validate.value.row_limit
                     )
