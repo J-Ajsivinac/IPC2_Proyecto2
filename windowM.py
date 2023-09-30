@@ -37,14 +37,6 @@ class WindowP(QWidget):
         self.m_list = LinkedList()
         self.inst_list = LinkedList()
         self.processed = LinkedList()
-        self.sidebar_active = """ QPushButton {
-                background-color: #242833;
-                color: #b1b8fa;
-                border: 0px;
-                border-radius: 4px;
-                padding:12px 0 12px 15px;
-                text-align: left;
-            }"""
         self.initUI()
 
     def initUI(self):
@@ -74,7 +66,7 @@ class WindowP(QWidget):
         self.layout_sidebar.addWidget(self.btn_help)
         self.layout_sidebar.addStretch(1)
 
-        self.btn_generate.setStyleSheet(self.sidebar_active)
+        self.btn_generate.setStyleSheet(Styles.SIDEBAR_BTN_ACTIVE)
 
         self.p_start()
         self.p_help()
@@ -138,24 +130,24 @@ class WindowP(QWidget):
     def change_view_init(self):
         self.stack.setCurrentIndex(0)
         self.reset_button_colors()
-        self.btn_generate.setStyleSheet(self.sidebar_active)
+        self.btn_generate.setStyleSheet(Styles.SIDEBAR_BTN_ACTIVE)
 
     def change_view_dron(self):
         self.stack.setCurrentIndex(1)
         self.reset_button_colors()
-        self.btn_view_d.setStyleSheet(self.sidebar_active)
+        self.btn_view_d.setStyleSheet(Styles.SIDEBAR_BTN_ACTIVE)
         self.data_dron()
 
     def change_view_m(self):
         self.stack.setCurrentIndex(2)
         self.reset_button_colors()
-        self.btn_messages.setStyleSheet(self.sidebar_active)
+        self.btn_messages.setStyleSheet(Styles.SIDEBAR_BTN_ACTIVE)
         self.data_messages()
 
     def change_view_help(self):
         self.stack.setCurrentIndex(3)
         self.reset_button_colors()
-        self.btn_help.setStyleSheet(self.sidebar_active)
+        self.btn_help.setStyleSheet(Styles.SIDEBAR_BTN_ACTIVE)
 
     def p_dron(self):
         self.panel_2 = QWidget(self)
@@ -165,18 +157,7 @@ class WindowP(QWidget):
         self.layout_add = QHBoxLayout(self.panel_add)
         self.text_add = QLineEdit()
         self.text_add.setPlaceholderText("Escriba el nombre del nuevo Dron")
-        self.text_add.setStyleSheet(
-            """
-    QLineEdit {
-        border: 0px;
-        border-radius: 4px;
-        color:white;
-        padding: 6px 8px;
-        background: #252633;
-        selection-background-color: #595C7A;
-    }
-"""
-        )
+        self.text_add.setStyleSheet(Styles.INPUT_DRON)
         self.btn_add = self.custom_button_form("Agregar", self.print_input)
         self.btn_add.setFixedSize(QtCore.QSize(120, 31))
         self.layout_add.addWidget(self.text_add)
@@ -197,16 +178,7 @@ class WindowP(QWidget):
         self.table.setColumnCount(1)
 
         self.header = self.table.horizontalHeader()
-        self.header.setStyleSheet(
-            """
-            QHeaderView::section 
-            { 
-                background-color: #141519;
-                color:#ffffff;border:0px;
-                border-top-left-radius:10px;
-                border-top-right-radius:10px;
-            }"""
-        )
+        self.header.setStyleSheet(Styles.HEADER_TABLE)
         self.header_vertical = self.table.verticalHeader()
         self.header_vertical.setStyleSheet(
             "QHeaderView::section { background-color: #171821;color:#ffffff;border:0px }"
@@ -223,21 +195,7 @@ class WindowP(QWidget):
         self.lable_system = QLabel("Sistema de Drones")
         self.lable_system.setStyleSheet("color:white")
         self.btn_graph_system = QPushButton("Graficar")
-        self.btn_graph_system.setStyleSheet(
-            """
-            QPushButton {
-                background-color: #468efc;
-                color: white;
-                border: 0px;
-                border-radius: 5px;
-                padding:8px 0 8px 0px;
-                font-weight:600;
-            }
-            QPushButton:hover {
-                background-color: #356BBD;
-                color: white;
-            }"""
-        )
+        self.btn_graph_system.setStyleSheet(Styles.BLUE_BTN)
         self.btn_graph_system.clicked.connect(self.graph_system)
         self.layout_system.addWidget(self.lable_system)
         self.layout_system.addWidget(self.btn_graph_system)
@@ -262,16 +220,7 @@ class WindowP(QWidget):
             1, QTableWidgetItem("Instrucciones")
         )
         header_messages = self.table_messages.horizontalHeader()
-        header_messages.setStyleSheet(
-            """
-            QHeaderView::section 
-            { 
-                background-color: #141519;
-                color:#ffffff;border:0px;
-                border-top-left-radius:10px;
-                border-top-right-radius:10px;
-            }"""
-        )
+        header_messages.setStyleSheet(Styles.HEADER_TABLE)
         header_v = self.table_messages.verticalHeader()
         header_v.setStyleSheet(
             "QHeaderView::section { background-color: #171821;color:#ffffff;border:0px }"
@@ -295,38 +244,10 @@ class WindowP(QWidget):
         self.combo = QComboBox()
         self.combo.setStyleSheet(Styles.S_COMBOBOX)
         btn_data = QPushButton("Ver Información")
-        btn_data.setStyleSheet(
-            """
-            QPushButton {
-                background-color: #c3c4f4;
-                color: #2B2B36;
-                border: 0px;
-                border-radius: 5px;
-                padding:6px 0 6px 0px;
-                font-weight:600;
-            }
-            QPushButton:hover {
-                background-color: #AFB0DB;
-                color: #2B2B36;
-            }"""
-        )
+        btn_data.setStyleSheet(Styles.PURPLE_BTN)
         btn_data.clicked.connect(self.view_information)
         btn_graph = QPushButton("Gráficar")
-        btn_graph.setStyleSheet(
-            """
-            QPushButton {
-                background-color: #468efc;
-                color: white;
-                border: 0px;
-                border-radius: 5px;
-                padding:6px 0 6px 0px;
-                font-weight:600;
-            }
-            QPushButton:hover {
-                background-color: #356BBD;
-                color: white;
-            }"""
-        )
+        btn_graph.setStyleSheet(Styles.BLUE_BTN)
         btn_graph.clicked.connect(self.graph_instructions)
         layout_data.addWidget(self.combo)
         layout_data.addWidget(btn_data)
@@ -394,21 +315,7 @@ class WindowP(QWidget):
         panel_btn1 = QWidget(panel_data)
         layout_btn1 = QVBoxLayout(panel_btn1)
         btn_doc = QPushButton("Ver Documentación")
-        btn_doc.setStyleSheet(
-            """
-            QPushButton {
-                background-color: #468efc;
-                color: white;
-                border: 0px;
-                border-radius: 5px;
-                padding:8px 0 8px 0px;
-                font-weight:600;
-            }
-            QPushButton:hover {
-                background-color: #356BBD;
-                color: white;
-            }"""
-        )
+        btn_doc.setStyleSheet(Styles.BLUE_BTN)
         btn_doc.clicked.connect(self.view_doc)
         # layout_btn1.addWidget(label_text1)
         layout_btn1.addWidget(btn_doc)
@@ -453,46 +360,7 @@ class WindowP(QWidget):
                     self.combo.addItem(f"{current.i_d}")
                 elif j == 1:
                     item = QTextEdit()
-                    item.setStyleSheet(
-                        """
-                        QTextEdit {
-                        background-color: #2a2a36;
-                        color: white;
-                        border: 0px;
-                        }
-                        QScrollBar:vertical {
-                            border: none;
-                            background-color:#343442;
-                            width: 10px;
-                            border-radius: 0px;
-                        }
-                        QScrollBar::handle:vertical {   
-                            background: #7d91db;
-                            min-height: 20px;
-                            border-radius: 4px;
-                        }
-                        
-                        QScrollBar::add-line:vertical {
-                            border: none;
-                            background: none;
-                        }
-                        QScrollBar::sub-line:vertical {
-                            border: none;
-                            background: none;
-                        }
-                        
-                        QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical
-                            {
-                                background: none;
-                            }
-
-                            QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical
-                            {
-                                background: none;
-                            }
-
-                        """
-                    )
+                    item.setStyleSheet(Styles.TEXT_INSTRUCTIONS)
                     current_v = current_inst.value.first
                     while current_v:
                         item.append(f"{current_v.i_d},{current_v.h_inst}")
@@ -507,68 +375,20 @@ class WindowP(QWidget):
             current_inst = current_inst.next_node
 
     def reset_button_colors(self):
-        style = """
-            QPushButton {
-                background-color: #13151b;
-                color: #696a78;
-                border: 0px;
-                border-radius: 4px;
-                padding:12px 0 12px 15px;
-                text-align: left;
-            }
-            QPushButton:hover {
-                background-color: #1B1E26;
-                color: #dcdcde;
-            }
-        """
-        self.btn_generate.setStyleSheet(style)
-        self.btn_view_d.setStyleSheet(style)
-        self.btn_messages.setStyleSheet(style)
-        self.btn_help.setStyleSheet(style)
+        self.btn_generate.setStyleSheet(Styles.SIDEBAR_BTN)
+        self.btn_view_d.setStyleSheet(Styles.SIDEBAR_BTN)
+        self.btn_messages.setStyleSheet(Styles.SIDEBAR_BTN)
+        self.btn_help.setStyleSheet(Styles.SIDEBAR_BTN)
 
     def custom_button(self, texto, funcion=None):
         boton = QPushButton(texto)
-        boton.setStyleSheet(
-            """
-            QPushButton {
-                background-color: #13151b;
-                color: #696a78;
-                border: 0px;
-                border-radius: 4px;
-                padding:12px 0 12px 15px;
-                text-align: left;
-            }
-            QPushButton:hover {
-                background-color: #1B1E26;
-                color: #dcdcde;
-            }
-        """
-        )
+        boton.setStyleSheet(Styles.SIDEBAR_BTN)
         boton.clicked.connect(funcion)
         return boton
 
     def custom_button_form(self, texto, funcion=None):
         boton = QPushButton(texto)
-        boton.setStyleSheet(
-            """
-            QPushButton {
-                background-color: #a6f1c8;
-                color: #000002;
-                border: 0px;
-                font-weight:500;
-                border-radius: 5px;
-                text-align: center;
-            }
-            QPushButton:hover {
-                background-color: #9BE1BB;
-                color: #2a3343;
-            }
-            QPushButton:pressed {
-                background-color: #89C7A5;
-                color: #202733;
-            }
-        """
-        )
+        boton.setStyleSheet(Styles.FORM_BTN)
         boton.clicked.connect(funcion)
         return boton
 
@@ -579,25 +399,7 @@ class WindowP(QWidget):
         btn.setIcon(icon)
         btn.setIconSize(QtCore.QSize(135, 135))
         btn.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
-        btn.setStyleSheet(
-            """
-            QToolButton {
-                background-color: #2B2C3B;
-                color: #636587;
-                border: 0px;
-                font-weight:600;
-                border-radius: 6px;
-            }
-            QToolButton:hover {
-                background-color: #303242;
-                color: #9195C7;
-            }
-            QToolButton:pressed {
-                background-color: #343547;
-                color: #ffffff;
-            }
-        """
-        )
+        btn.setStyleSheet(Styles.PRINC_BTN)
         btn.clicked.connect(funcion)
         return btn
 
