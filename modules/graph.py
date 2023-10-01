@@ -37,7 +37,7 @@ class Graph:
                     table_html += "<TR>"
                     for x in range(current.value.row_limit + 1):
                         if temp is None:
-                            # table_html += '<TD BGCOLOR="#d1d5db"> </TD>'
+                            table_html += '<TD BGCOLOR="#94979C"> </TD>'
                             continue
                         columns = temp.value
                         if m == 0:
@@ -54,7 +54,7 @@ class Graph:
                             if result:
                                 table_html += f"<TD>{result.value}</TD>"
                             else:
-                                table_html += "<TD> </TD>"
+                                table_html += "<TD BGCOLOR='#94979C'> </TD>"
                             # print(x)
                             temp = temp.next_node
                     if m != 1:

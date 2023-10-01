@@ -29,9 +29,9 @@ class LinkedList:
         self.end = current.next_node
         self.size += 1
 
-    def insert_sorted(self, i_d, value=None):
-        if self.verify_dup(i_d):
-            # error_msgbox("Error", f"El nombre {i_d} ya está registrado --")
+    def insert_sorted(self, i_d, value=None, is_dron=False):
+        if self.verify_dup(i_d) and is_dron:
+            error_msgbox("Error", f"El nombre {i_d} ya está registrado")
             return
 
         if not i_d:
@@ -251,5 +251,15 @@ class LinkedList:
                 rows = current.value.rows
                 result = rows.search_binary_dup(dron)
                 return result
+            current = current.next_node
+        return None
+
+    def verfy_dron_hight(self, i_d):
+        current = self.first
+        while current:
+            if current.i_d == i_d:
+                # rows = current.value.rows
+                # result = rows.search_binary_dup(dron)
+                return current
             current = current.next_node
         return None

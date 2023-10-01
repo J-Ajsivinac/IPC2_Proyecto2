@@ -102,22 +102,34 @@ class WindowP(QWidget):
         icon_init = QtGui.QIcon(Icons.BTN_RESET)
         icon_upload = QtGui.QIcon(Icons.BTN_UPL)
         icon_xml = QtGui.QIcon(Icons.BTN_XML)
-        self.btn_init = self.big_buttons("Inicializar Sistema", icon_init, self.reset)
+        icon_prcess = QtGui.QIcon(Icons.BTN_PROCESS)
 
         self.btn_open = self.big_buttons(
             "Cargar Archivo", icon_upload, self.show_dialog
         )
         self.btn_create = self.big_buttons("Generar Archivo", icon_xml, self.create_xml)
-        self.layout_init.addWidget(self.btn_init)
+
+        # self.layout_init.addWidget(self.btn_init)
         self.layout_init.addWidget(self.btn_open)
         self.layout_init.addWidget(self.btn_create)
+
+        self.panel_second = QWidget(self.panel_right)
+        self.layout_second = QHBoxLayout(self.panel_second)
+
+        self.btn_process = self.big_buttons(
+            "Procesar Datos", icon_prcess, self.process_file
+        )
+        self.btn_init = self.big_buttons("Inicializar Sistema", icon_init, self.reset)
+        self.layout_second.addWidget(self.btn_process)
+        self.layout_second.addWidget(self.btn_init)
         # self.layout_init.addWidget(self.panel_init)
         self.panel_init.setStyleSheet("background-color: #171821")
 
         self.layout_right.addWidget(self.panel_up)
         self.layout_right.addWidget(self.panel_init)
+        self.layout_right.addWidget(self.panel_second)
         self.panel_right.setStyleSheet("background-color: #171821;")
-        self.panel_right.setFixedHeight(320)
+        # self.panel_right.setFixedHeight(520)
 
     def print_input(self):
         text = self.text_add.text()
@@ -420,8 +432,16 @@ class WindowP(QWidget):
             read = Read()
             read.read_file(str(archivo))
             read.load_data(self.drone_list, self.s_list, self.m_list)
-            self.m_list.call_optimize(self.s_list, self.processed)
-            # self.processed.print_temp()
+            correct_msgbox("Carga Completada", "Los datos válidos se han registrado")
+
+    def process_file(self):
+        if self.m_list.size == 0:
+            alert_msgbox("Advertencia", "No hay datos Cargados")
+            return
+        self.m_list.call_optimize(self.s_list, self.processed)
+        correct_msgbox(
+            "Procesamiento Completado", "Los datos válidos se han registrado"
+        )
 
     def reset(self):
         self.drone_list.empty_list()
@@ -429,10 +449,15 @@ class WindowP(QWidget):
         self.m_list.empty_list()
         self.inst_list.empty_list()
         self.processed.empty_list()
+        correct_msgbox("Operación Exitosa", "El sistema se Inicializo")
 
     def create_xml(self):
+        if self.processed.size == 0:
+            alert_msgbox("Advertencia", "No hay datos Procesados")
+            return
         w = Write("salida.xml")
         w.write_document(self.processed)
+        correct_msgbox("Operación Exitosa", "Archivo creado correctamente")
 
     def graph_system(self):
         if self.s_list.size == 0:

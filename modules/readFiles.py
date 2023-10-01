@@ -17,13 +17,13 @@ class Read:
         self.load_list_drone(list_sistem)
         self.load_list_mes(list_messages)
         # list_dron.print_drone()
-        list_sistem.print_temp()
+        # list_sistem.print_temp()
         # list_messages.print_temp1()
 
     def load_drones(self, list_ori: LinkedList):
         for list_d in self.root.findall("listaDrones"):
             for dron in list_d.findall("dron"):
-                list_ori.insert_sorted(dron.text)
+                list_ori.insert_sorted(dron.text, is_dron=True)
 
     def load_list_drone(self, list_ori: LinkedList):
         for list_ in self.root.findall("listaSistemasDrones"):
@@ -46,9 +46,6 @@ class Read:
                 update_row = False
                 update_all = False
                 for content in sistem_l.findall("contenido"):
-                    if error:
-                        continue
-
                     dron = content.findtext("dron")
                     temp = LinkedList()
                     temp_list = self.list_sistem.verify_dup(system_name)
@@ -77,7 +74,6 @@ class Read:
 
                         if t:
                             temp = t.value
-                            print(t.i_d, "}}}")
                             update_row = True
                     if not self.list_dron.verify_dup(dron):
                         error_msgbox(
@@ -89,7 +85,8 @@ class Read:
                     for Hight in content.findall("alturas"):
                         for h in Hight.findall("altura"):
                             value = h.text
-
+                            if int(h.get("valor")) <= 0:
+                                continue
                             if int(h.get("valor")) <= int(h_limit):
                                 if value is None:
                                     value = " "
@@ -139,7 +136,7 @@ class Read:
                             continue
                         value = int(i.text)
                         dup = list_ins.search_from_end(i.get("dron"))
-                        # dup = list_ins.search_from_end(i.get("dron"))
+                        # dup = list_ins.search_from_end(i.get("dron"
 
                         if not self.list_dron.verify_dup(i.get("dron")):
                             error_msgbox(
@@ -148,15 +145,20 @@ class Read:
                             )
                             # error = True
                             continue
-
-                        if not self.list_sistem.verfy_dron_m(
-                            system_name, i.get("dron")
-                        ):
+                        rows = self.list_sistem.verfy_dron_m(system_name, i.get("dron"))
+                        if not rows:
                             error_msgbox(
                                 "Error",
                                 f"El dron {i.get('dron')} no esta en el sistema de drones {system_name}",
                             )
                             # error = True
+                            continue
+                        times = rows.value
+                        if not times.verfy_dron_hight(int(i.text)):
+                            error_msgbox(
+                                "Error",
+                                f"El dron {i.get('dron')} no tiene una altura {i.text}",
+                            )
                             continue
 
                         if int(i.text) > max_c:
