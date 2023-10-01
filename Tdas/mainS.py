@@ -11,6 +11,7 @@ class MainSistem:
     # name, id
     def create_matrix(self, hight, row):
         self.rows.insert_sorter(hight, row)
+        # print(self.rows.size)
 
     def create_matrix_instr(self, hight, row):
         self.rows.insert(hight, row)

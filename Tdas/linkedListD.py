@@ -31,7 +31,7 @@ class LinkedList:
 
     def insert_sorted(self, i_d, value=None):
         if self.verify_dup(i_d):
-            error_msgbox("Error", f"El nombre {i_d} ya está registrado --")
+            # error_msgbox("Error", f"El nombre {i_d} ya está registrado --")
             return
 
         if not i_d:

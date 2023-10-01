@@ -17,7 +17,7 @@ class Read:
         self.load_list_drone(list_sistem)
         self.load_list_mes(list_messages)
         # list_dron.print_drone()
-        # list_sistem.print_temp()
+        list_sistem.print_temp()
         # list_messages.print_temp1()
 
     def load_drones(self, list_ori: LinkedList):
@@ -43,7 +43,8 @@ class Read:
                     )
                 matrix = MainSistem(int(d_limit), int(h_limit))
                 error = False
-                update = False
+                update_row = False
+                update_all = False
                 for content in sistem_l.findall("contenido"):
                     if error:
                         continue
@@ -53,11 +54,9 @@ class Read:
                     temp_list = self.list_sistem.verify_dup(system_name)
                     if temp_list:
                         matrix = temp_list.value
-                        print(matrix.rows.size, matrix.row_limit, "---")
-                        if matrix.rows.size > matrix.row_limit - 1:
-                            error = True
-                            print(matrix.rows.size, matrix.row_limit)
-                            break
+                        update_all = True
+                        # print(matrix.rows.size, matrix.row_limit, "---")
+
                         if (
                             int(d_limit) < matrix.row_limit
                             or int(h_limit) < matrix.col_limit
@@ -67,11 +66,19 @@ class Read:
                                 "No se puede tener un limite inferior al ya ingresado",
                             )
 
+                        if int(d_limit) > matrix.row_limit:
+                            matrix.row_limit = int(d_limit)
+                            # matrix.col_limit = int(h_limit)
+                        if int(d_limit) > matrix.col_limit:
+                            matrix.col_limit = int(h_limit)
+
                         # temp = matrix.rows
                         t = matrix.verify_dup(dron)
+
                         if t:
                             temp = t.value
-                            update = True
+                            print(t.i_d, "}}}")
+                            update_row = True
                     if not self.list_dron.verify_dup(dron):
                         error_msgbox(
                             "Error",
@@ -86,22 +93,18 @@ class Read:
                             if int(h.get("valor")) <= int(h_limit):
                                 if value is None:
                                     value = " "
-                                if temp.verify_replace(int(h.get("valor")), value):
-                                    update = True
-                                else:
+
+                                if not temp.verify_replace(int(h.get("valor")), value):
+                                    # print(int(h.get("valor")), value, "¿¿¿")
+                                    if matrix.rows.size > matrix.row_limit:
+                                        error = True
+                                        continue
                                     temp.insert_sorted(int(h.get("valor")), value)
-                                    update = False
-                                # print(h.get("valor"), value)
-                            else:
-                                error_msgbox(
-                                    "Error",
-                                    f"Altura: {h.get('valor')}\nMayor al limite del sistema: {system_name}",
-                                )
-                    if not update:
+                    if not update_row:
                         matrix.create_matrix(dron, temp)
-                if not error and not update:
+                if not error and not update_all:
                     list_ori.insert_sorted(system_name, matrix)
-                # print(matrix.rows, system_name)
+                # print(temp.size, "--")
             # print()
 
     def load_list_mes(self, list_ori: LinkedList):

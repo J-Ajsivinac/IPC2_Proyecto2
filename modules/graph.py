@@ -29,14 +29,17 @@ class Graph:
 
                 current_matrix = current.value.rows.first
                 rows = current_matrix.value.first
-                times = current_matrix.value.size
+                times = current.value.col_limit
+                # print(times, current.value.col_limit)
                 for m in range(times + 1):
                     temp = current.value.rows.first
+                    # if rows:
                     table_html += "<TR>"
                     for x in range(current.value.row_limit + 1):
                         if temp is None:
+                            # table_html += '<TD BGCOLOR="#d1d5db"> </TD>'
                             continue
-                        columns = temp.value.first
+                        columns = temp.value
                         if m == 0:
                             if x == 0:
                                 table_html += '<TD BGCOLOR="#2c2c2c"><FONT COLOR="white">Altura (m)</FONT></TD>'
@@ -46,12 +49,18 @@ class Graph:
                         else:
                             if x == 0:
                                 table_html += f"<TD>{m}</TD>"
+                                continue
+                            result = columns.verify_dup(m)
+                            if result:
+                                table_html += f"<TD>{result.value}</TD>"
                             else:
-                                for _ in range(m - 1):
-                                    columns = columns.next_node
-                                table_html += f"<TD>{columns.value}</TD>"
-                                temp = temp.next_node
+                                table_html += "<TD> </TD>"
+                            # print(x)
+                            temp = temp.next_node
                     if m != 1:
+                        if rows is None:
+                            table_html += "</TR>"
+                            continue
                         rows = rows.next_node
                     table_html += "</TR>"
 
