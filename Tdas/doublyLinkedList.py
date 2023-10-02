@@ -119,22 +119,13 @@ class DoublyLinkedListSistem:
                 break
         return None
 
-    def search_n(self, name):
-        current = self.first
-        while current is not None:
-            if current.i_d == name:
-                return current
-            current = current.next
-
-        return None
-
     def search_from_end(self, value):
         last = self.end
         while last and last.i_d != value:
             last = last.last_node
 
-        while last and last.i_d != value:
-            last = last.last_node
+        # while last and last.i_d != value:
+        #     last = last.last_node
 
         if last:
             return last
