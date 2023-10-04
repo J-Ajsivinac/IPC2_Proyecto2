@@ -15,6 +15,7 @@ class Graph:
     def create_sistem(self, list_sys: LinkedList):
         current = list_sys.first
         i = 0
+        self.dot.attr(label="Listado de Sistema de Drones", labelloc="t", labeljust="c")
         while current:
             with self.dot.subgraph(name=f"cluster_{i}") as cl:
                 cl.attr(
@@ -37,7 +38,7 @@ class Graph:
                     table_html += "<TR>"
                     for x in range(current.value.row_limit + 1):
                         if temp is None:
-                            table_html += '<TD BGCOLOR="#94979C"> </TD>'
+                            # table_html += '<TD BGCOLOR="#94979C"> </TD>'
                             continue
                         columns = temp.value
                         if m == 0:
@@ -70,6 +71,8 @@ class Graph:
                     label=table_html,
                     shape="none",
                 )
+                if i > 0:
+                    self.dot.edge(f"table_{i-1}", f"table_{i}", style="invis")
                 i += 1
                 current = current.next_node
         self.generate()
@@ -77,6 +80,9 @@ class Graph:
     def create_message(self, data):
         with self.dot.subgraph(name="cluster_1") as cl:
             cl.attr(
+                label=f"Nombre del Mensaje: {data.i_d}",
+                labelloc="t",
+                labeljust="c",
                 bgcolor="#eff6ff",
                 color="#bedbfe",
                 style="rounded",

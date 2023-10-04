@@ -95,17 +95,23 @@ class WindowP(QWidget):
     def p_start(self):
         # Panel
         self.panel_right = QWidget(self)
-        self.layout_right = QVBoxLayout(self.panel_right)
 
-        self.panel_up = QWidget(self.panel_right)
+        self.layout_right = QVBoxLayout(self.panel_right)
+        self.layout_right.setContentsMargins(20, 20, 20, 20)
+
+        panel_prin = QWidget(self.panel_right)
+        layout_prin = QVBoxLayout(panel_prin)
+        # panel_prin.setStyleSheet("background-color:#21222d; border-radius:10px")
+
+        self.panel_up = QWidget(panel_prin)
         self.layout_up = QVBoxLayout(self.panel_up)
 
-        self.label1 = QLabel("Inicio", self.panel_up)
-        self.label1.setStyleSheet("color:#ffffff")
+        self.label1 = QLabel("Inicio")
+        self.label1.setStyleSheet("color:#ffffff;font-weight:500;")
         self.layout_up.addWidget(self.label1)
         self.panel_up.setFixedHeight(30)
 
-        self.panel_init = QWidget(self.panel_right)
+        self.panel_init = QWidget(panel_prin)
         self.layout_init = QHBoxLayout(self.panel_init)
         icon_init = QtGui.QIcon(Icons.BTN_RESET)
         icon_upload = QtGui.QIcon(Icons.BTN_UPL)
@@ -121,7 +127,7 @@ class WindowP(QWidget):
         self.layout_init.addWidget(self.btn_open)
         self.layout_init.addWidget(self.btn_create)
 
-        self.panel_second = QWidget(self.panel_right)
+        self.panel_second = QWidget(panel_prin)
         self.layout_second = QHBoxLayout(self.panel_second)
 
         self.btn_process = self.big_buttons(
@@ -131,19 +137,27 @@ class WindowP(QWidget):
         self.layout_second.addWidget(self.btn_process)
         self.layout_second.addWidget(self.btn_init)
         # self.layout_init.addWidget(self.panel_init)
-        self.panel_init.setStyleSheet("background-color: #171821")
+        # self.panel_init.setStyleSheet("background-color: #171821")
 
-        self.layout_right.addWidget(self.panel_up)
-        self.layout_right.addWidget(self.panel_init)
-        self.layout_right.addWidget(self.panel_second)
+        # self.layout_right.addWidget(self.panel_up)
+        # self.layout_right.addWidget(self.panel_init)
+        # self.layout_right.addWidget(self.panel_second)
+        layout_prin.addWidget(self.panel_up)
+        layout_prin.addWidget(self.panel_init)
+        layout_prin.addWidget(self.panel_second)
+        self.layout_right.addWidget(panel_prin)
         self.panel_right.setStyleSheet("background-color: #171821;")
         # self.panel_right.setFixedHeight(520)
 
     def print_input(self):
         text = self.text_add.text()
         if text.strip():
-            self.drone_list.insert_sorted(text)
+            size = self.drone_list.size
+            self.drone_list.insert_sorted(text, is_dron=True)
             self.data_dron()
+            if size < self.drone_list.size:
+                correct_msgbox("Operación Exitosa", "Dron registrado correctamente")
+                self.text_add.setText("")
         else:
             error_msgbox("error", "Ingrese Datos para poder Ingresarlos")
 
@@ -176,11 +190,14 @@ class WindowP(QWidget):
     def p_dron(self):
         self.panel_2 = QWidget(self)
         self.layout_2 = QVBoxLayout(self.panel_2)
+        label_add = QLabel("  Agregar un Dron")
+        label_add.setStyleSheet("color:white;font-weight:500")
+        self.layout_2.addWidget(label_add)
         self.layout_2.setSpacing(0)
         self.panel_add = QWidget(self.panel_2)
         self.layout_add = QHBoxLayout(self.panel_add)
         self.text_add = QLineEdit()
-        self.text_add.setPlaceholderText("Escriba el nombre del nuevo Dron")
+        self.text_add.setPlaceholderText("Escriba el nombre del Dron")
         self.text_add.setStyleSheet(Styles.INPUT_DRON)
         self.btn_add = self.custom_button_form("Agregar", self.print_input)
         self.btn_add.setFixedSize(QtCore.QSize(120, 31))
@@ -191,7 +208,7 @@ class WindowP(QWidget):
         self.panel_title_t = QWidget(self.panel_2)
         self.layout_title_t = QHBoxLayout(self.panel_title_t)
         self.label_title1 = QLabel("Listado de Drones")
-        self.label_title1.setStyleSheet("QLabel { color:#ffffff; padding:0 }")
+        self.label_title1.setStyleSheet("color:#ffffff;font-weight:500;")
         self.layout_title_t.addWidget(self.label_title1)
         self.panel_title_t.setFixedHeight(32)
 
@@ -217,6 +234,7 @@ class WindowP(QWidget):
         self.layout_system = QVBoxLayout(self.panel_system)
 
         self.lable_system = QLabel("Sistema de Drones")
+        self.lable_system.setStyleSheet("color:#ffffff;font-weight:500;")
         self.lable_system.setStyleSheet("color:white")
         self.btn_graph_system = QPushButton("Graficar")
         self.btn_graph_system.setStyleSheet(Styles.BLUE_BTN)
@@ -236,6 +254,7 @@ class WindowP(QWidget):
         panel_message = QWidget(self.panel_3)
         layout_message = QVBoxLayout(panel_message)
         label_mesages = QLabel("Listado de Mensajes")
+        label_mesages.setStyleSheet("color:#ffffff;font-weight:500;")
         label_mesages.setStyleSheet("color:white")
         self.table_messages = QTableWidget()
         self.table_messages.setColumnCount(2)
@@ -259,7 +278,7 @@ class WindowP(QWidget):
         layout_instructions = QVBoxLayout(panel_instructions)
 
         label_instructins = QLabel("Instrucciones a Enviar")
-        label_instructins.setStyleSheet("color:white")
+        label_instructins.setStyleSheet("color:#ffffff;font-weight:500;")
         layout_instructions.addWidget(label_instructins)
 
         panel_data = QWidget(panel_instructions)
@@ -309,7 +328,7 @@ class WindowP(QWidget):
         panel_data5 = QWidget(panel_info)
         layout_data5 = QVBoxLayout(panel_data5)
         label_t1 = QLabel("Carné")
-        label_t1.setStyleSheet("color:white")
+        label_t1.setStyleSheet("color:#ffffff;font-weight:500;")
         label_c = QLabel("202200135")
         label_c.setStyleSheet("color:white")
         layout_data5.addWidget(label_t1)
@@ -318,7 +337,7 @@ class WindowP(QWidget):
         panel_data1 = QWidget(panel_info)
         layout_data1 = QVBoxLayout(panel_data1)
         label_t2 = QLabel("Carrera")
-        label_t2.setStyleSheet("color:white")
+        label_t2.setStyleSheet("color:#ffffff;font-weight:500;")
         label_c2 = QLabel("Ingeniería en Ciencias y Sistemas")
         label_c2.setStyleSheet("color:white")
         layout_data1.addWidget(label_t2)
@@ -327,7 +346,7 @@ class WindowP(QWidget):
         panel_data2 = QWidget(panel_info)
         layout_data2 = QVBoxLayout(panel_data2)
         label_t3 = QLabel("Semestre")
-        label_t3.setStyleSheet("color:white")
+        label_t3.setStyleSheet("color:#ffffff;font-weight:500;")
         label_c3 = QLabel("Cuarto")
         label_c3.setStyleSheet("color:white")
         layout_data2.addWidget(label_t3)
@@ -503,6 +522,9 @@ class WindowP(QWidget):
             return
         text = self.combo.currentText()
         found = self.processed.s_search_b_hight(text)
+        if found is None:
+            error_msgbox("Error", "No hay instrucciones para el mensaje")
+            return
         gr = Graph(f"grafica_{found.i_d}")
         gr.create_message(found)
 

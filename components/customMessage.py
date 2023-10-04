@@ -35,6 +35,7 @@ class MsgBox(QDialog):
         self.title.setStyleSheet("color:white;font-weight:600;border:0px")
         self.layout.addWidget(self.title, alignment=Qt.AlignCenter)
         self.text = QLabel(f"{text}")
+        self.text.setAlignment(Qt.AlignCenter)
         self.text.setStyleSheet("color:white;border:0px")
         self.layout.addWidget(self.text, alignment=Qt.AlignCenter)
         self.button = QPushButton("Ok")
@@ -42,7 +43,7 @@ class MsgBox(QDialog):
         self.button.setStyleSheet(Styles.BTN_ALERT)
         self.layout.addWidget(self.button)
         self.setLayout(self.layout)
-        self.setFixedSize(380, 240)
+        self.setFixedSize(410, 240)
         self.setStyleSheet(f"background-color:#1a1a1f;border-top:3px solid #{color}")
 
     def mousePressEvent(self, event):

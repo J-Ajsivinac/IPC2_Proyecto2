@@ -46,6 +46,8 @@ class Read:
                 update_row = False
                 update_all = False
                 for content in sistem_l.findall("contenido"):
+                    if error:
+                        continue
                     dron = content.findtext("dron")
                     temp = LinkedList()
                     temp_list = self.list_sistem.verify_dup(system_name)
@@ -60,7 +62,7 @@ class Read:
                         ):
                             error_msgbox(
                                 "Error",
-                                "Los limites deben ser iguales",
+                                f"Los limites deben ser iguales\nsistema: {system_name}",
                             )
                             error = True
                             continue
@@ -80,7 +82,7 @@ class Read:
                     if not self.list_dron.verify_dup(dron):
                         error_msgbox(
                             "Error",
-                            f"El dron {dron} no esta en la lista de drones\nNo se agregará el sistema",
+                            f"El dron {dron} no esta en la lista de drones",
                         )
                         error = True
                         continue
@@ -96,7 +98,6 @@ class Read:
                                 if not temp.verify_replace(int(h.get("valor")), value):
                                     # print(int(h.get("valor")), value, "¿¿¿")
                                     if matrix.rows.size > matrix.row_limit:
-                                        error = True
                                         continue
                                     temp.insert_sorted(int(h.get("valor")), value)
                     if not update_row:
@@ -151,7 +152,7 @@ class Read:
                         if not rows:
                             error_msgbox(
                                 "Error",
-                                f"El dron {i.get('dron')} no esta en el sistema de drones {system_name}",
+                                f"El dron {i.get('dron')} no esta\nen el sistema de drones {system_name}",
                             )
                             # error = True
                             continue
@@ -174,6 +175,14 @@ class Read:
                             value -= dup.h_inst
                         list_ins.insert(i.get("dron"), value, int(i.text))
                 if not error and not upadate:
-                    list_ori.insert_sorted_msg(
-                        message_name, list_ins, system_name, validate.value.row_limit
-                    )
+                    if list_ins.size != 0:
+                        list_ori.insert_sorted_msg(
+                            message_name,
+                            list_ins,
+                            system_name,
+                            validate.value.row_limit,
+                        )
+                    else:
+                        alert_msgbox(
+                            "Advertencia", f"{message_name} no tiene instrucciones"
+                        )
