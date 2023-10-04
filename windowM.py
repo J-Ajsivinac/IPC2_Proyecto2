@@ -55,11 +55,19 @@ class WindowP(QWidget):
         self.sidebar.setFixedWidth(220)
         self.layout_sidebar.setSpacing(20)
 
-        self.btn_generate = self.custom_button("Inicio", self.change_view_init)
-        self.btn_view_d = self.custom_button("Drones", self.change_view_dron)
-        # self.btn_view_list = self.custom_button("Sistemas de Drones")
-        self.btn_messages = self.custom_button("Mensajes", self.change_view_m)
-        self.btn_help = self.custom_button("Ayuda", self.change_view_help)
+        self.btn_generate = self.custom_button(
+            "  Inicio", QIcon(Icons.BTN_HOME_HOVER), self.change_view_init
+        )
+        self.btn_view_d = self.custom_button(
+            "  Drones", QIcon(Icons.BTN_DRON), self.change_view_dron
+        )
+        self.btn_messages = self.custom_button(
+            "  Mensajes", QIcon(Icons.BTN_MESSAGE), self.change_view_m
+        )
+        self.btn_help = self.custom_button(
+            "  Ayuda", QIcon(Icons.BTN_INFO), self.change_view_help
+        )
+
         self.layout_sidebar.addWidget(self.btn_generate)
         self.layout_sidebar.addWidget(self.btn_view_d)
         self.layout_sidebar.addWidget(self.btn_messages)
@@ -143,23 +151,27 @@ class WindowP(QWidget):
         self.stack.setCurrentIndex(0)
         self.reset_button_colors()
         self.btn_generate.setStyleSheet(Styles.SIDEBAR_BTN_ACTIVE)
+        self.btn_generate.setIcon(QIcon(Icons.BTN_HOME_HOVER))
 
     def change_view_dron(self):
         self.stack.setCurrentIndex(1)
         self.reset_button_colors()
         self.btn_view_d.setStyleSheet(Styles.SIDEBAR_BTN_ACTIVE)
+        self.btn_view_d.setIcon(QIcon(Icons.BTN_DRON_HOVER))
         self.data_dron()
 
     def change_view_m(self):
         self.stack.setCurrentIndex(2)
         self.reset_button_colors()
         self.btn_messages.setStyleSheet(Styles.SIDEBAR_BTN_ACTIVE)
+        self.btn_messages.setIcon(QIcon(Icons.BTN_MESSAGE_HOVER))
         self.data_messages()
 
     def change_view_help(self):
         self.stack.setCurrentIndex(3)
         self.reset_button_colors()
         self.btn_help.setStyleSheet(Styles.SIDEBAR_BTN_ACTIVE)
+        self.btn_help.setIcon(QIcon(Icons.BTN_INFO_HOVER))
 
     def p_dron(self):
         self.panel_2 = QWidget(self)
@@ -388,15 +400,21 @@ class WindowP(QWidget):
 
     def reset_button_colors(self):
         self.btn_generate.setStyleSheet(Styles.SIDEBAR_BTN)
+        self.btn_generate.setIcon(QIcon(Icons.BTN_HOME))
         self.btn_view_d.setStyleSheet(Styles.SIDEBAR_BTN)
+        self.btn_view_d.setIcon(QIcon(Icons.BTN_DRON))
         self.btn_messages.setStyleSheet(Styles.SIDEBAR_BTN)
+        self.btn_messages.setIcon(QIcon(Icons.BTN_MESSAGE))
         self.btn_help.setStyleSheet(Styles.SIDEBAR_BTN)
+        self.btn_help.setIcon(QIcon(Icons.BTN_INFO))
 
-    def custom_button(self, texto, funcion=None):
-        boton = QPushButton(texto)
-        boton.setStyleSheet(Styles.SIDEBAR_BTN)
-        boton.clicked.connect(funcion)
-        return boton
+    def custom_button(self, texto, icon, funcion=None):
+        btn = QPushButton(texto)
+        btn.setStyleSheet(Styles.SIDEBAR_BTN)
+        btn.setIcon(icon)
+        btn.setIconSize(QtCore.QSize(22, 22))
+        btn.clicked.connect(funcion)
+        return btn
 
     def custom_button_form(self, texto, funcion=None):
         boton = QPushButton(texto)

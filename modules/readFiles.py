@@ -55,13 +55,15 @@ class Read:
                         # print(matrix.rows.size, matrix.row_limit, "---")
 
                         if (
-                            int(d_limit) < matrix.row_limit
-                            or int(h_limit) < matrix.col_limit
+                            int(d_limit) != matrix.row_limit
+                            or int(h_limit) != matrix.col_limit
                         ):
                             error_msgbox(
                                 "Error",
-                                "No se puede tener un limite inferior al ya ingresado",
+                                "Los limites deben ser iguales",
                             )
+                            error = True
+                            continue
 
                         if int(d_limit) > matrix.row_limit:
                             matrix.row_limit = int(d_limit)

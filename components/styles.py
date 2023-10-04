@@ -218,6 +218,7 @@ class Styles:
             background-color: #13151b;
             color: #696a78;
             border: 0px;
+            font-weight:600;
             border-radius: 4px;
             padding:12px 0 12px 15px;
             text-align: left;
@@ -225,10 +226,11 @@ class Styles:
         QPushButton:hover {
             background-color: #1B1E26;
             color: #dcdcde;
+            font-weight:600;
         }
         """
 
-    SIDEBAR_BTN_ACTIVE = """ 
+    SIDEBAR_BTN_ACTIVE = """
         QPushButton {
             background-color: #242833;
             color: #b1b8fa;
@@ -236,4 +238,5 @@ class Styles:
             border-radius: 4px;
             padding:12px 0 12px 15px;
             text-align: left;
+            font-weight:600;
         }"""
