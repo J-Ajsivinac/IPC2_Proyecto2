@@ -458,7 +458,7 @@ class WindowP(QWidget):
     def show_dialog(self):
         opciones = QFileDialog.Options()
 
-        opciones |= QFileDialog.ReadOnly  # Opcional: Si solo deseas lectura
+        opciones |= QFileDialog.ReadOnly
 
         archivo, _ = QFileDialog.getOpenFileName(
             self,
@@ -495,9 +495,20 @@ class WindowP(QWidget):
         if self.processed.size == 0:
             alert_msgbox("Advertencia", "No hay datos Procesados")
             return
-        w = Write("salida.xml")
-        w.write_document(self.processed)
-        correct_msgbox("Operación Exitosa", "Archivo creado correctamente")
+        options = QFileDialog.Options()
+        options |= QFileDialog.ReadOnly
+        file_name, _ = QFileDialog.getSaveFileName(
+            self,
+            "Guardar Archivo",
+            "",
+            "XML Files (*.xml)",
+            options=options,
+        )
+
+        if file_name:
+            w = Write(str(file_name))
+            w.write_document(self.processed)
+            correct_msgbox("Operación Exitosa", "Archivo creado correctamente")
 
     def graph_system(self):
         if self.s_list.size == 0:
