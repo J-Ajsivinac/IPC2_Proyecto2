@@ -1,5 +1,7 @@
 <h1 align="center">Proyecto 2</h1>
-<!-- Descripción del Proyecto -->
+<p align="center">
+    <a href="#"><img src="https://i.imgur.com/iLNDwx7.png"></a>
+</p>
 <p align="center">Programa de envio de mensajes encriptados mediante el uso de drones</p>
 
 <div align="center">
@@ -12,7 +14,3 @@
 <div align="center"> 📆 Segundo Semestre 2023</div>
 
 <br>
-
-## Requerimientos
-* Python 3.11.5 o superior
-* PySide 6 v6.5.2 o superior
