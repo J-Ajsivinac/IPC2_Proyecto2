@@ -16,9 +16,6 @@ class Read:
         self.load_drones(list_dron)
         self.load_list_drone(list_sistem)
         self.load_list_mes(list_messages)
-        # list_dron.print_drone()
-        # list_sistem.print_temp()
-        # list_messages.print_temp1()
 
     def load_drones(self, list_ori: LinkedList):
         for list_d in self.root.findall("listaDrones"):
@@ -34,12 +31,12 @@ class Read:
                 if int(h_limit) > 100:
                     alert_msgbox(
                         "Advertencia",
-                        "El limite de alturas permitido es 100\nSe cambia las alturas a 100",
+                        f"Limite de alturas sobrepasado\nSistema de drones: {h_limit}",
                     )
                 if int(d_limit) > 200:
                     alert_msgbox(
                         "Advertencia",
-                        "El limite de drones permitido es 200\nSe cambia el No. Drones a 200",
+                        f"El limite de drones sobrepasado\nSistema de drones: {h_limit}",
                     )
                 matrix = MainSistem(int(d_limit), int(h_limit))
                 error = False
@@ -60,29 +57,30 @@ class Read:
                             int(d_limit) != matrix.row_limit
                             or int(h_limit) != matrix.col_limit
                         ):
-                            error_msgbox(
-                                "Error",
-                                f"Los limites deben ser iguales\nsistema: {system_name}",
+                            alert_msgbox(
+                                "Sistema No Actualizado",
+                                f"Los limites deben ser iguales a los ya ingresados\nSistema de Drones: {system_name}",
                             )
                             error = True
                             continue
-
-                        if int(d_limit) > matrix.row_limit:
-                            matrix.row_limit = int(d_limit)
-                            # matrix.col_limit = int(h_limit)
-                        if int(d_limit) > matrix.col_limit:
-                            matrix.col_limit = int(h_limit)
-
                         # temp = matrix.rows
                         t = matrix.verify_dup(dron)
 
                         if t:
                             temp = t.value
                             update_row = True
+
+                    if matrix.rows.size > matrix.row_limit - 1 and not update_row:
+                        alert_msgbox(
+                            "Limite de Drones alcanzado",
+                            f"Dron {dron} omitido\nSistema de drones: {system_name}",
+                        )
+                        continue
+
                     if not self.list_dron.verify_dup(dron):
                         error_msgbox(
                             "Error",
-                            f"El dron {dron} no esta en la lista de drones",
+                            f"El dron {dron} no esta en la lista de drones\nSistema de Drones: {system_name} omitido",
                         )
                         error = True
                         continue
@@ -97,8 +95,6 @@ class Read:
 
                                 if not temp.verify_replace(int(h.get("valor")), value):
                                     # print(int(h.get("valor")), value, "¿¿¿")
-                                    if matrix.rows.size > matrix.row_limit:
-                                        continue
                                     temp.insert_sorted(int(h.get("valor")), value)
                     if not update_row:
                         matrix.create_matrix(dron, temp)
@@ -128,6 +124,11 @@ class Read:
                 temp_list = list_ori.verify_dup(message_name)
 
                 if temp_list:
+                    if temp_list.name_system != system_name:
+                        error_msgbox(
+                            "Error",
+                            f"Sistema de drones en {message_name} \nSon diferentes, se omite el mensjae",
+                        )
                     list_ins = temp_list.value
                     temp_list.processed = False
                     upadate = True
@@ -142,7 +143,7 @@ class Read:
                         # dup = list_ins.search_from_end(i.get("dron"
 
                         if not self.list_dron.verify_dup(i.get("dron")):
-                            error_msgbox(
+                            alert_msgbox(
                                 "Error",
                                 f"El dron {i.get('dron')} no esta en la lista de drones",
                             )
@@ -150,24 +151,25 @@ class Read:
                             continue
                         rows = self.list_sistem.verfy_dron_m(system_name, i.get("dron"))
                         if not rows:
-                            error_msgbox(
+                            alert_msgbox(
                                 "Error",
-                                f"El dron {i.get('dron')} no esta\nen el sistema de drones {system_name}",
+                                f"El dron {i.get('dron')} no está\nen el sistema de drones {system_name}",
                             )
                             # error = True
                             continue
-                        times = rows.value
-                        if not times.verfy_dron_hight(int(i.text)):
-                            error_msgbox(
+
+                        if int(i.text) > max_c:
+                            alert_msgbox(
                                 "Error",
-                                f"El dron {i.get('dron')} no tiene una altura {i.text}",
+                                f"La altura {i.text} esta fuera de rango Limite: {max_c}\nSistema de dron: {system_name}",
                             )
                             continue
 
-                        if int(i.text) > max_c:
-                            error_msgbox(
+                        times = rows.value
+                        if not times.verfy_dron_hight(int(i.text)):
+                            alert_msgbox(
                                 "Error",
-                                f"La altura {i.text} esta fuera de rango\nLimite: {max_c}\nSistema de dron: {system_name}",
+                                f"El dron {i.get('dron')} no tiene una altura {i.text}\nLinea Omitida",
                             )
                             continue
 
@@ -183,6 +185,6 @@ class Read:
                             validate.value.row_limit,
                         )
                     else:
-                        alert_msgbox(
+                        error_msgbox(
                             "Advertencia", f"{message_name} no tiene instrucciones"
                         )

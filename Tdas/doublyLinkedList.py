@@ -105,7 +105,6 @@ class DoublyLinkedListSistem:
 
         left = self.first
         right = self.end
-        # print(f"double:{left.i_d}--{right.i_d}")
         while True:
             if left is not None:
                 if left.i_d == name:
@@ -123,9 +122,6 @@ class DoublyLinkedListSistem:
         last = self.end
         while last and last.i_d != value:
             last = last.last_node
-
-        # while last and last.i_d != value:
-        #     last = last.last_node
 
         if last:
             return last
@@ -158,10 +154,9 @@ class DoublyLinkedListSistem:
         list_temp = DoublyLinkedListSistem()
         current = self.first
         while current:
-            # print(current.i_d, current.value, current.h_inst)
             comp = current.i_d
             validate = list_temp.search_binary_next(comp)
-            # print(validate, current.i_d, current.value, current.h_inst, "---")
+
             if validate is None:
                 current.next = None
                 current.prev = None
@@ -174,12 +169,8 @@ class DoublyLinkedListSistem:
         list_temp = self.crete_temp()
         current = list_temp.first
         count = 0
-        # print("...")
-        # list_temp.print_d()
-        # print("...")
+
         while current:
-            # if current:
-            #     print("--", current.i_d, current.value, current.h_inst)
             h = current.value
             if h < 0:
                 h = h * -1
@@ -189,7 +180,7 @@ class DoublyLinkedListSistem:
                 count += 1
 
             self.delete_f()
-            # list_temp.delete_f()
+
             list_temp = None
             list_temp = self.crete_temp()
 
@@ -204,17 +195,15 @@ class DoublyLinkedListSistem:
         while current_instructions:
             while current:
                 if current.i_d == current_instructions.i_d:
-                    # print(current.value, "--")
-                    current_list = current.value.first
-                    for _ in range(current_instructions.h_inst - 1):
-                        current_list = current_list.next_node
-                    if current_list is not None:
-                        message += current_list.value
+                    current_list = current.value
+                    value_s = current_list.verify_dup(current_instructions.h_inst)
+                    if value_s is not None:
+                        message += value_s.value
                         break
                 current = current.next_node
             current = matrix.rows.first
             current_instructions = current_instructions.next_node
-        # print(message)
+
         return message
 
     def empty_list(self):

@@ -97,7 +97,7 @@ class MsgInformation(QDialog):
         self.button.clicked.connect(self.close)
         self.layout.addWidget(self.button)
         self.setLayout(self.layout)
-        self.setFixedSize(390, 280)
+        self.setFixedSize(455, 280)
         self.setStyleSheet("background-color:#1a1a1f;border-top:3px solid #33a9ff")
 
     def mousePressEvent(self, event):

@@ -154,7 +154,7 @@ class LinkedList:
 
         left = self.first
         right = self.end
-        # print(name, left.i_d, right.i_d)
+
         while left is not None and right is not None and left.i_d != right.i_d:
             mid = left
             while mid.next_node.i_d != right.i_d:
@@ -216,7 +216,6 @@ class LinkedList:
                     matrix.create_matrix_instr(current_dron.i_d, temp)
                     current_dron = current_dron.next_node
 
-            # print(validate.value)
             message = current.value.decode(validate.value)
             _ = current.value.optimize(matrix)
             current.processed = True
@@ -258,8 +257,6 @@ class LinkedList:
         current = self.first
         while current:
             if current.i_d == i_d:
-                # rows = current.value.rows
-                # result = rows.search_binary_dup(dron)
                 return current
             current = current.next_node
         return None

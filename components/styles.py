@@ -51,7 +51,7 @@ class Styles:
         QComboBox {
             background-color: #252633;
             border: 0px;
-            padding: 6px 0px 6px 0px;
+            padding: 8px 0px 8px 0px;
             color:white;
             border-radius:5px;
         }
@@ -75,7 +75,7 @@ class Styles:
         }
     """
 
-    WHITE_INFO = "color:white;border:0px;font-weight:500"
+    WHITE_INFO = "color:white;border:0px;font-weight:600"
 
     BTN_ALERT = """
         QPushButton {
@@ -105,8 +105,10 @@ class Styles:
     HEADER_TABLE = """
         QHeaderView::section 
         { 
-            background-color: #141519;
-            color:#ffffff;border:0px;
+            background-color: #0E0F14;
+            color:#ffffff;
+            font-weight:600;
+            border:0px;
             border-top-left-radius:10px;
             border-top-right-radius:10px;
         }"""
@@ -131,7 +133,7 @@ class Styles:
             color: #2B2B36;
             border: 0px;
             border-radius: 5px;
-            padding:6px 0 6px 0px;
+            padding:8px 0 8px 0px;
             font-weight:600;
         }
         QPushButton:hover {
@@ -144,6 +146,7 @@ class Styles:
             background-color: #2a2a36;
             color: white;
             border: 0px;
+            selection-background-color: #595C7A;
         }
         QScrollBar:vertical {
             border: none;

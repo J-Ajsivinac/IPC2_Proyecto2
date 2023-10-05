@@ -107,9 +107,12 @@ class WindowP(QWidget):
         self.layout_up = QVBoxLayout(self.panel_up)
 
         self.label1 = QLabel("Inicio")
-        self.label1.setStyleSheet("color:#ffffff;font-weight:500;")
+        self.label_selec = QLabel("Elija una Opción")
+        self.label1.setStyleSheet("color:#ffffff;font-weight:700;")
+        self.label_selec.setStyleSheet("color:#ffffff;margin-top:5px")
         self.layout_up.addWidget(self.label1)
-        self.panel_up.setFixedHeight(30)
+        self.layout_up.addWidget(self.label_selec)
+        self.panel_up.setFixedHeight(70)
 
         self.panel_init = QWidget(panel_prin)
         self.layout_init = QHBoxLayout(self.panel_init)
@@ -191,7 +194,7 @@ class WindowP(QWidget):
         self.panel_2 = QWidget(self)
         self.layout_2 = QVBoxLayout(self.panel_2)
         label_add = QLabel("  Agregar un Dron")
-        label_add.setStyleSheet("color:white;font-weight:500")
+        label_add.setStyleSheet(Styles.WHITE_INFO)
         self.layout_2.addWidget(label_add)
         self.layout_2.setSpacing(0)
         self.panel_add = QWidget(self.panel_2)
@@ -208,7 +211,7 @@ class WindowP(QWidget):
         self.panel_title_t = QWidget(self.panel_2)
         self.layout_title_t = QHBoxLayout(self.panel_title_t)
         self.label_title1 = QLabel("Listado de Drones")
-        self.label_title1.setStyleSheet("color:#ffffff;font-weight:500;")
+        self.label_title1.setStyleSheet(Styles.WHITE_INFO)
         self.layout_title_t.addWidget(self.label_title1)
         self.panel_title_t.setFixedHeight(32)
 
@@ -234,8 +237,8 @@ class WindowP(QWidget):
         self.layout_system = QVBoxLayout(self.panel_system)
 
         self.lable_system = QLabel("Sistema de Drones")
-        self.lable_system.setStyleSheet("color:#ffffff;font-weight:500;")
-        self.lable_system.setStyleSheet("color:white")
+        self.lable_system.setStyleSheet(Styles.WHITE_INFO)
+
         self.btn_graph_system = QPushButton("Graficar")
         self.btn_graph_system.setStyleSheet(Styles.BLUE_BTN)
         self.btn_graph_system.clicked.connect(self.graph_system)
@@ -254,8 +257,8 @@ class WindowP(QWidget):
         panel_message = QWidget(self.panel_3)
         layout_message = QVBoxLayout(panel_message)
         label_mesages = QLabel("Listado de Mensajes")
-        label_mesages.setStyleSheet("color:#ffffff;font-weight:500;")
-        label_mesages.setStyleSheet("color:white")
+        label_mesages.setStyleSheet(Styles.WHITE_INFO)
+
         self.table_messages = QTableWidget()
         self.table_messages.setColumnCount(2)
         self.table_messages.setHorizontalHeaderItem(0, QTableWidgetItem("Nombre"))
@@ -278,7 +281,7 @@ class WindowP(QWidget):
         layout_instructions = QVBoxLayout(panel_instructions)
 
         label_instructins = QLabel("Instrucciones a Enviar")
-        label_instructins.setStyleSheet("color:#ffffff;font-weight:500;")
+        label_instructins.setStyleSheet(Styles.WHITE_INFO)
         layout_instructions.addWidget(label_instructins)
 
         panel_data = QWidget(panel_instructions)
@@ -310,7 +313,7 @@ class WindowP(QWidget):
         layout_data = QVBoxLayout(panel_data)
         panel_data.setStyleSheet("background-color:#21222d; border-radius:10px")
         label_title = QLabel("Datos del Estudiante")
-        label_title.setStyleSheet("color:white;font-weight:700")
+        label_title.setStyleSheet(Styles.WHITE_INFO)
         # panel_data.setFixedHeight(200)
 
         panel_prin = QWidget(panel_data)
@@ -406,7 +409,7 @@ class WindowP(QWidget):
                     item.setStyleSheet(Styles.TEXT_INSTRUCTIONS)
                     current_v = current_inst.value.first
                     while current_v:
-                        item.append(f"{current_v.i_d},{current_v.h_inst}")
+                        item.append(f"{current_v.i_d}, {current_v.h_inst}")
                         current_v = current_v.next_node
                     item.setReadOnly(True)
                     self.table_messages.setCellWidget(i, j, item)
