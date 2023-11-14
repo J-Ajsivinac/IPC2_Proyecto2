@@ -150,28 +150,28 @@ El programa esta creado de forma que al momento de encontrar algún inconvenient
 
 Se muestra cuando se terminó un proceso, sirve para indicar que se completó una acción, mostrando un mensaje del tipo de acción completada 
 <p align="center">
-    <img src="screenshots/msg1.png">
+    <img src="screenshots/msg1.png" width="350px">
 </p>
 
 **Error**
 
 Se muestra cuando se encontró un error, y sirve para indicar que tipo de error se encontro, mostrandolo en pantalla
 <p align="center">
-    <img src="screenshots/msg2.png">
+    <img src="screenshots/msg2.png" width="350px">
 </p>
 
 **Advertencia**
 
 Se muestra cuando se encontró alguna inconsistencia, y sirve para indicar que tipo de inconsistencia se encontro, mostrandolo en pantalla
 <p align="center">
-    <img src="screenshots/msg4.png">
+    <img src="screenshots/msg4.png" width="350px">
 </p>
 
 **Mostrar Datos de Mensajes**
 
 Se muestra cuando se encontró se quiere ver la información de un mensaje, (como se indico en la sección de Mensajes)
 <p align="center">
-    <img src="screenshots/msg3.png">
+    <img src="screenshots/msg3.png" width="350px">
 </p>
 
 ## 📖 Documentación
