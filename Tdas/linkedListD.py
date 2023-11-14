@@ -34,6 +34,10 @@ class LinkedList:
             error_msgbox("Error", f"El nombre {i_d} ya está registrado")
             return
 
+        if is_dron and self.size > 199:
+            alert_msgbox("Alerta", "Se ha alcanzado el límite de drones")
+            return
+
         if not i_d:
             i_d = self.size + 1
         new_data = NodeDrone(i_d, value)

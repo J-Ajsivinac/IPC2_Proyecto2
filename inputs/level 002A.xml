@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+   <listaDrones>
+      <dron>Viserion</dron>
+      <dron>Drogon</dron>
+      <dron>Rhaegal</dron>
+   </listaDrones>
+   <listaSistemasDrones>
+      <sistemaDrones nombre="sistemamedio">
+         <alturaMaxima>30</alturaMaxima>
+         <cantidadDrones>3</cantidadDrones>
+         <contenido>
+            <dron>Viserion</dron>
+            <alturas>
+               <altura valor="1">G</altura>
+               <altura valor="4">D</altura>
+               <altura valor="7">U</altura>
+               <altura valor="10">E</altura>
+               <altura valor="13">G</altura>
+               <altura valor="16">N</altura>
+               <altura valor="19">S</altura>
+               <altura valor="22">I</altura>
+               <altura valor="25">Z</altura>
+               <altura valor="28">D</altura>
+            </alturas>
+         </contenido>
+         <contenido>
+            <dron>Rhaegal</dron>
+            <alturas>
+               <altura valor="1">Q</altura>
+               <altura valor="4">W</altura>
+               <altura valor="7">R</altura>
+               <altura valor="10">Y</altura>
+               <altura valor="13">W</altura>
+               <altura valor="16">J</altura>
+               <altura valor="19">E</altura>
+               <altura valor="22">Z</altura>
+               <altura valor="25">I</altura>
+               <altura valor="28">R</altura>
+            </alturas>
+         </contenido>
+         <contenido>
+            <dron>Drogon</dron>
+            <alturas>
+               <altura valor="1">H</altura>
+               <altura valor="4">F</altura>
+               <altura valor="7">I</altura>
+               <altura valor="10">D</altura>
+               <altura valor="13">U</altura>
+               <altura valor="16">L</altura>
+               <altura valor="19">S</altura>
+               <altura valor="22">M</altura>
+               <altura valor="25">W</altura>
+               <altura valor="28">A</altura>
+            </alturas>
+         </contenido>
+      </sistemaDrones>
+   </listaSistemasDrones>
+   <listaMensajes>
+      <Mensaje nombre="mensajemedio">
+         <sistemaDrones>sistemamedio</sistemaDrones>
+         <instrucciones>
+            <instruccion dron="Viserion">28</instruccion>
+            <instruccion dron="Rhaegal">28</instruccion>
+            <instruccion dron="Drogon">28</instruccion>
+         </instrucciones>
+      </Mensaje>
+   </listaMensajes>
+</config>
